@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import com.ashlikun.core.listener.IBaseWindow
+import com.ashlikun.utils.other.LogUtils
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
@@ -23,12 +23,56 @@ open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
 
     override fun <T : androidx.lifecycle.ViewModel?> create(modelClass: Class<T>): T {
         val model = super.create(modelClass)
+        initModel(model)
+        return model
+    }
+
+    /**
+     * 宿主是否重新创建了,与initModel方法对应
+     * true:重新创建了
+     * false:第一次创建
+     */
+    fun <T> isReCreate(model: T): Boolean {
+        if (model is BaseViewModel) {
+            //context
+            var result = when {
+                model.context != null -> {
+                    val context: Context? = when (mvvmBaseInterface) {
+                        is Context -> mvvmBaseInterface as Context
+                        is Fragment -> (mvvmBaseInterface as Fragment).context
+                        else -> null
+                    }
+                    context != model.context
+                }
+                model.lifecycleOwner != null -> mvvmBaseInterface != model.lifecycleOwner
+                else -> false
+            }
+            if (result) {
+                //清空对宿主的引用
+                model.context = null
+                model.lifecycleOwner = null
+                model.loadSwitchService = null
+                LogUtils.e("viewmode 是重新创建的  ")
+                initModel(model)
+            }
+            return result
+        }
+        return false
+    }
+
+    /**
+     * 初始化公共的资源
+     */
+    fun <T> initModel(model: T) {
         if (model is BaseViewModel) {
             //vm保存context
-            if (mvvmBaseInterface is Context) {
-                model.context = mvvmBaseInterface as Context
-            } else if (mvvmBaseInterface is Fragment) {
-                model.context = (mvvmBaseInterface as Fragment).context
+            model.context = when (mvvmBaseInterface) {
+                is Context -> mvvmBaseInterface as Context
+                is Fragment -> (mvvmBaseInterface as Fragment).context
+                else -> null
+            }
+            if (mvvmBaseInterface is LifecycleOwner) {
+                model.lifecycleOwner = mvvmBaseInterface as LifecycleOwner
             }
             //处理vm的公共事件
             mvvmBaseInterface?.handeBaseEventer(model)
@@ -37,7 +81,6 @@ open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
                 model.addObserver.postValue(model as LifecycleObserver)
             }
         }
-        return model
     }
 
     companion object {

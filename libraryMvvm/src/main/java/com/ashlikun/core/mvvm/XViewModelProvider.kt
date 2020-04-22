@@ -13,17 +13,21 @@ import java.lang.Exception
  *
  * 功能介绍：自己实现ViewModelProvider
  */
-open class XViewModelProvider : ViewModelProvider {
+open class XViewModelProvider(store: ViewModelStore, var factory: Factory) : ViewModelProvider(store, factory) {
     private val keys = HashMap<String, Class<*>>()
 
     constructor(owner: ViewModelStoreOwner, factory: Factory) : this(owner.viewModelStore, factory)
-    constructor(store: ViewModelStore, factory: Factory) : super(store, factory)
 
     override fun <T : ViewModel> get(key: String, modelClass: Class<T>): T {
         if (!keys.containsKey(key)) {
             keys[key] = modelClass
         }
-        return super.get(key, modelClass)
+        val model = super.get(key, modelClass)
+        //是否重新创建
+        if (factory is ViewModelFactoryImp) {
+            (factory as ViewModelFactoryImp).isReCreate(model)
+        }
+        return model
     }
 
     fun <T : ViewModel> get(key: String): T {

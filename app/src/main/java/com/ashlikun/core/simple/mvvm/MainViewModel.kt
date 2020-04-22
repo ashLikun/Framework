@@ -1,4 +1,4 @@
-package com.ashlikun.core.simple
+package com.ashlikun.core.simple.mvvm
 
 import com.ashlikun.core.mvvm.BaseViewModel
 import com.ashlikun.utils.other.LogUtils
@@ -12,7 +12,6 @@ import com.ashlikun.utils.other.LogUtils
  * 功能介绍：
  */
 class MainViewModel : BaseViewModel() {
-
     override fun onCreate() {
         super.onCreate()
         LogUtils.e("onCreate")
@@ -37,5 +36,15 @@ class MainViewModel : BaseViewModel() {
     override fun onStop() {
         super.onStop()
         LogUtils.e("onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LogUtils.e("onDestroy")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        LogUtils.e("onCleared")
     }
 }

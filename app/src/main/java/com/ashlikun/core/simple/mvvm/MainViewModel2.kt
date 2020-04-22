@@ -1,4 +1,4 @@
-package com.ashlikun.core.simple
+package com.ashlikun.core.simple.mvvm
 
 import com.ashlikun.core.mvvm.BaseViewModel
 import com.ashlikun.utils.other.LogUtils
@@ -35,5 +35,15 @@ class MainViewModel2 : BaseViewModel() {
     override fun onStop() {
         super.onStop()
         LogUtils.e("onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LogUtils.e("onDestroy")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        LogUtils.e("onCleared")
     }
 }

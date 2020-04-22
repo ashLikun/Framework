@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
-
+import com.ashlikun.core.simple.R
 import com.ashlikun.core.activity.BaseMvpActivity
 
 class MainActivity : BaseMvpActivity<MainPresenter>(), IMainView {
@@ -17,7 +17,7 @@ class MainActivity : BaseMvpActivity<MainPresenter>(), IMainView {
 
     override fun getLayoutId(): Int {
         Log.e("MainActivity", "getLayoutId")
-        return R.layout.activity_main
+        return R.layout.activity_main_mvp
 
     }
 

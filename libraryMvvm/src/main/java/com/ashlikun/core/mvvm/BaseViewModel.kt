@@ -10,6 +10,7 @@ import com.ashlikun.core.listener.OnDispatcherMessage
 import com.ashlikun.loadswitch.ContextData
 import com.ashlikun.loadswitch.LoadSwitchService
 import com.ashlikun.okhttputils.http.OkHttpUtils
+import com.ashlikun.utils.main.ActivityUtils
 import com.ashlikun.utils.ui.ActivityManager
 
 /**
@@ -20,6 +21,19 @@ import com.ashlikun.utils.ui.ActivityManager
  * 功能介绍：VM 的基础,自动感知生命周期
  */
 open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcherMessage {
+    //这几个是和对宿主的引用，这里得额外处理
+    //上下文
+    var context: Context? = null
+
+    //布局切换
+    var loadSwitchService: LoadSwitchService? = null
+
+    //感知页面生命周期
+    var lifecycleOwner: LifecycleOwner? = null
+
+    //这几个是和对宿主的引用，这里得额外处理 结束
+
+
     //VM是否Cleared
     var isCleared = false
         private set
@@ -29,17 +43,8 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
         LiveDataProvider()
     }
 
-    //上下文
-    var context: Context? = null
-
-    //布局切换
-    var loadSwitchService: LoadSwitchService? = null
-
     //数据是否初始化过
     var dataInit = false
-
-    //感知页面生命周期
-    var lifecycleOwner: LifecycleOwner? = null
 
     //清空数据
     internal val clearData: MutableLiveData<String> by lazy {
@@ -119,6 +124,10 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     open fun onStop() {
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    open fun onDestroy() {
+    }
+
     /**
      * 解析意图数据
      */
@@ -129,8 +138,8 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     /**
      * 获取前台Activity
      */
-    open fun getActivity(): Activity? = ActivityManager.getForegroundActivity()
-
+    open fun getActivity(): Activity? = ActivityUtils.getActivity(context)
+            ?: ActivityManager.getForegroundActivity()
 
     /**
      * UI发送过来的事件
@@ -142,11 +151,11 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
 
     override fun onCleared() {
         super.onCleared()
+        cancelAllHttp()
         isCleared = true
         lifecycleOwner = null
         context = null
         loadSwitchService = null
-        cancelAllHttp()
     }
 
     /**

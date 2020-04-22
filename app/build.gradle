@@ -62,6 +62,10 @@ dependencies {
     implementation 'com.github.ashLikun:LoadSwitch:+'
     //Okhttp工具
     implementation 'com.github.ashLikun:OkHttpUtils:+'
+    implementation 'com.squareup.okhttp3:okhttp:3.+'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.github.ashLikun:MultiTypeGson:2.0.1'
+    implementation 'com.github.ashLikun:LiteOrm:2.0.1'
     implementation('com.alibaba:arouter-api:+') {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"

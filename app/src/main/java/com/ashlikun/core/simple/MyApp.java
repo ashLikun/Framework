@@ -3,6 +3,8 @@ package com.ashlikun.core.simple;
 import androidx.multidex.MultiDexApplication;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.ashlikun.okhttputils.http.OkHttpUtils;
+import com.ashlikun.orm.LiteOrmUtil;
 import com.ashlikun.utils.AppUtils;
 
 /**
@@ -20,5 +22,7 @@ public class MyApp extends MultiDexApplication {
         AppUtils.setDebug(true);
         AppUtils.init(this);
         ARouter.init(this);
+        LiteOrmUtil.init(this);
+        OkHttpUtils.init(null);
     }
 }
