@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -56,6 +57,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent() == null) {
+            setIntent(new Intent());
+        }
         parseIntent(getIntent());
         setActivityContentView(getLayoutId());
         setStatueBar();
@@ -68,6 +72,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (intent == null) {
+            intent = new Intent();
+        }
         setIntent(intent);
         parseIntent(intent);
         initData();
@@ -171,8 +178,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
      * <p>
      * 方法功能：解析意图
      */
-    public void parseIntent(Intent intent) {
-        ARouter.getInstance().inject(this);
+    protected void parseIntent(@NonNull Intent intent) {
+        try {
+            ARouter.getInstance().inject(this);
+        } catch (Exception e) {
+
+        }
     }
 
 

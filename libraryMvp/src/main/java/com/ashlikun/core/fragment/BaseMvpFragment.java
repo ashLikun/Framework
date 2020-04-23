@@ -2,6 +2,10 @@ package com.ashlikun.core.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ashlikun.core.BasePresenter;
 import com.ashlikun.core.factory.PresenterFactoryImp;
@@ -55,8 +59,8 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (!isRecycle) {
             if (presenter != null) {
                 presenter.onCreate(savedInstanceState);
@@ -108,14 +112,6 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends
             throw new RuntimeException("Presenter创建失败!检查是否声明了@Presenter(XXX.class)注解  或者 从写initPresenter方法 或者当前View的泛型没用Presenter");
         }
         return presenter;
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (presenter != null) {
-            presenter.onHiddenChanged(hidden);
-        }
     }
 
     @Override

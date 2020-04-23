@@ -40,7 +40,6 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
 
     override fun initLoadSwitch() {
         super.initLoadSwitch()
-        viewModel.loadSwitchService = switchService
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.loadSwitchService = switchService
@@ -48,13 +47,13 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
         }
     }
 
-    override fun parseIntent(intent: Intent?) {
+    override fun parseIntent(intent: Intent) {
         super.parseIntent(intent)
         if (intent != null) {
-            viewModel.parseIntent(intent!!)
+            viewModel.parseIntent(intent)
             viewModelProvider.forEach<ViewModel> {
                 if (it is BaseViewModel) {
-                    it.parseIntent(intent!!)
+                    it.parseIntent(intent)
                 }
             }
         }
@@ -70,7 +69,6 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
 
     override fun onDispatcherMessage(what: Int, bundle: Bundle?) {
         super.onDispatcherMessage(what, bundle)
-        viewModel.onDispatcherMessage(what, bundle)
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.onDispatcherMessage(what, bundle)

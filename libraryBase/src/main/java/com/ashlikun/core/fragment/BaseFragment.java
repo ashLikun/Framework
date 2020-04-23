@@ -1,12 +1,14 @@
 package com.ashlikun.core.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -85,7 +87,11 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
-        ARouter.getInstance().inject(this);
+        Intent intent = new Intent();
+        if (getArguments() != null) {
+            intent.putExtras(getArguments());
+        }
+        parseIntent(intent);
     }
 
     @Nullable
@@ -114,15 +120,14 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (!isRecycle) {
             baseInitView();
             initView();
             initData();
         }
     }
-
 
     /**
      * 作者　　: 李坤
@@ -132,6 +137,19 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
      */
     protected void initData() {
 
+    }
+
+    /**
+     * 作者　　: 李坤
+     * 创建时间: 2016/9/22 11:16
+     * <p>
+     * 方法功能：解析意图
+     */
+    protected void parseIntent(Intent intent) {
+        try {
+            ARouter.getInstance().inject(this);
+        } catch (Exception e) {
+        }
     }
 
     protected void baseInitView() {

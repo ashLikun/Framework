@@ -13,9 +13,10 @@ import com.ashlikun.utils.other.LogUtils
  */
 class MainViewModel : BaseViewModel() {
     override fun onCreate() {
-        super.onCreate()
         LogUtils.e("onCreate")
+        super.onCreate()
     }
+
 
 
     override fun onStart() {

@@ -33,25 +33,15 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
         viewModelProvider[modelClass!!]
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
         //初始化
         viewModel.dataInit
         initViewModel()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val intent = Intent()
-        if (arguments != null) {
-            intent.putExtras(arguments)
-        }
-        parseIntent(intent)
     }
 
     override fun initLoadSwitch() {
         super.initLoadSwitch()
-        viewModel.loadSwitchService = switchService
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.loadSwitchService = switchService
@@ -71,11 +61,11 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
     }
 
 
-    protected open fun parseIntent(intent: Intent) {
-        viewModel.parseIntent(intent!!)
+    override fun parseIntent(intent: Intent) {
+        super.parseIntent(intent)
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
-                it.parseIntent(intent!!)
+                it.parseIntent(intent)
             }
         }
     }
@@ -86,7 +76,6 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
 
     override fun onDispatcherMessage(what: Int, bundle: Bundle?) {
         super.onDispatcherMessage(what, bundle)
-        viewModel.onDispatcherMessage(what, bundle)
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.onDispatcherMessage(what, bundle)

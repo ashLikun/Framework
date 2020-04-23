@@ -45,14 +45,14 @@ open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
                     context != model.context
                 }
                 model.lifecycleOwner != null -> mvvmBaseInterface != model.lifecycleOwner
-                else -> false
+                else -> model.isDestroy
             }
             if (result) {
                 //清空对宿主的引用
+                model.isDestroy = false
                 model.context = null
                 model.lifecycleOwner = null
                 model.loadSwitchService = null
-                LogUtils.e("viewmode 是重新创建的  ")
                 initModel(model)
             }
             return result
@@ -76,10 +76,8 @@ open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
             }
             //处理vm的公共事件
             mvvmBaseInterface?.handeBaseEventer(model)
-            if (model is LifecycleObserver) {
-                //vm监听Activity或者Fragment的生命周期
-                model.addObserver.postValue(model as LifecycleObserver)
-            }
+            //vm监听Activity或者Fragment的生命周期
+            model.addObserver.postValue(model)
         }
     }
 

@@ -21,7 +21,10 @@ import com.ashlikun.utils.ui.ActivityManager
  * 功能介绍：VM 的基础,自动感知生命周期
  */
 open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcherMessage {
-    //这几个是和对宿主的引用，这里得额外处理
+    //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常
+    //标记是否与宿主断开，就是宿主是否销毁（准备开始重建）
+    internal var isDestroy = false
+
     //上下文
     var context: Context? = null
 
@@ -31,7 +34,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     //感知页面生命周期
     var lifecycleOwner: LifecycleOwner? = null
 
-    //这几个是和对宿主的引用，这里得额外处理 结束
+    //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常 结束
 
 
     //VM是否Cleared
@@ -126,6 +129,11 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     open fun onDestroy() {
+        //防止内存泄漏
+        lifecycleOwner = null
+        context = null
+        loadSwitchService = null
+        isDestroy = true
     }
 
     /**
@@ -156,6 +164,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
         lifecycleOwner = null
         context = null
         loadSwitchService = null
+        isDestroy = false
     }
 
     /**
