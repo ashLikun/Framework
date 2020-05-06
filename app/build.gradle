@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
+// 使用Kotlin插件
 apply plugin: 'kotlin-android'
+// 使用Kotlin Android扩展插件
+apply plugin: 'kotlin-android-extensions'
+//kapt插件
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -12,14 +16,11 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         multiDexEnabled = true
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
             }
         }
-    }
-    dataBinding {
-        enabled true
     }
     buildTypes {
         release {
@@ -43,8 +44,11 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api rootProject.ext.designVersion
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation rootProject.ext.designVersion
+    implementation 'androidx.multidex:multidex:2.0.1'
     //数字进度条
     implementation 'com.github.ashLikun.frame:numberprogressbar:3.0.0'
     implementation 'com.github.ashLikun:CircleProgressView:+'
@@ -70,12 +74,8 @@ dependencies {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
-    annotationProcessor 'com.alibaba:arouter-compiler:+'
-    implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api project(path: ':libraryMvvm')
+    kapt 'com.alibaba:arouter-compiler:+'
+
+    implementation project(path: ':libraryMvvm')
     api project(path: ':libraryMvp')
-}
-repositories {
-    mavenCentral()
 }
