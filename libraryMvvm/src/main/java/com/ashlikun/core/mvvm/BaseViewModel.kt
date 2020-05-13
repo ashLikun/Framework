@@ -104,6 +104,10 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
         showEmpty.postValue(contextData)
     }
 
+    open fun showRetry(contextData: ContextData) {
+        showRetry.postValue(contextData)
+    }
+
     /**
      * 创建的时候,一般用于主动获取数据
      */
