@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.*
-import androidx.lifecycle.ViewModel
 import com.ashlikun.core.listener.OnDispatcherMessage
 import com.ashlikun.loadswitch.ContextData
 import com.ashlikun.loadswitch.LoadSwitchService
@@ -161,6 +160,21 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      */
     override fun onDispatcherMessage(what: Int, bundle: Bundle?) {}
 
+    /**
+     * 处理fragment发送过来的数据
+     *
+     * @param what:事件类型
+     * @param data      事件传递的数据
+     */
+    override fun onDispatcherMessage(what: Int, data: Any?) {}
+
+    /**
+     * 提供数据给Fragment
+     *
+     * @param what:事件类型
+     * @return 事件传递的数据
+     */
+    override fun <T : Any?> getDispatcherMessage(what: Int): T? = null
     override fun onCleared() {
         super.onCleared()
         cancelAllHttp()

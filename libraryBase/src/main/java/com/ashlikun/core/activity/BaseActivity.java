@@ -37,18 +37,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
 
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:14
-     * <p>
-     * 方法功能：请求CODE
+     * 请求CODE
      */
     public int REQUEST_CODE = Math.abs(this.getClass().getSimpleName().hashCode() % 60000);
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:13
-     * <p>
-     * 方法功能：布局切换
+     * 布局切换
      */
     public LoadSwitchService switchService = null;
     protected SuperToolBar toolbar;
@@ -81,11 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2017/7/5 14:38
-     * 邮箱　　：496546144@qq.com
-     * <p>
-     * 方法功能：设置状态栏
+     * 设置状态栏
      */
     protected void setStatueBar() {
         if (isStatusBarEnable()) {
@@ -101,22 +91,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
 
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2017/7/5 14:03
-     * 邮箱　　：496546144@qq.com
-     * <p>
-     * 方法功能：设置activity的布局，可以重写
+     * 设置activity的布局，可以重写
      */
     protected void setActivityContentView(@LayoutRes int layoutId) {
         setContentView(layoutId);
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2017/7/5 10:59
-     * 邮箱　　：496546144@qq.com
-     * <p>
-     * 方法功能：基本的View初始化
+     * 基本的View初始化
      */
     protected void baseInitView() {
         toolbar = f(R.id.toolbar);
@@ -145,38 +127,26 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:06
-     * <p>
-     * 方法功能：获取布局id
+     * 获取布局id
      */
     @Override
     public abstract int getLayoutId();
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:16
-     * <p>
-     * 方法功能：初始化view
+     * 初始化view
      */
     @Override
     public abstract void initView();
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2017/9/11 0011 20:23
-     * <p>
-     * 方法功能：初始化数据
+     * 初始化数据
      */
     protected void initData() {
 
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:16
-     * <p>
-     * 方法功能：解析意图
+     * ：解析意图
      */
     protected void parseIntent(@NonNull Intent intent) {
         try {
@@ -188,10 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
 
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:06
-     * <p>
-     * 方法功能：获取状态栏颜色
+     * 获取状态栏颜色
      */
     public int getStatusBarColor() {
         //获取主题颜色
@@ -202,21 +169,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2017/8/3 0003 23:39
-     * <p>
-     * 方法功能：内容是不是放到状态栏里面
+     * 内容是不是放到状态栏里面
      */
     public boolean isStatusTranslucent() {
         return false;
     }
 
     /**
-     * @author　　: 李坤
-     * 创建时间: 2019/3/1 0:05
-     * 邮箱　　：496546144@qq.com
-     * <p>
-     * 功能介绍：6.0以下是否绘制半透明,因为不能设置状态栏字体颜色
+     * 6.0以下是否绘制半透明,因为不能设置状态栏字体颜色
      */
 
     public boolean isStatusTranslucentAndroidMHalf() {
@@ -224,10 +184,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:07
-     * <p>
-     * 方法功能：状态栏是否开启沉浸式
+     * 状态栏是否开启沉浸式
      */
     public boolean isStatusBarEnable() {
         return true;
@@ -235,10 +192,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
 
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:07
-     * <p>
-     * 方法功能：显示不同的界面布局 监听器
+     * 显示不同的界面布局 监听器
      */
     @Override
     public OnLoadSwitchClick getOnLoadSwitchClick() {
@@ -250,10 +204,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:07
-     * <p>
-     * 方法功能：获取需要转化为{@link LoadSwitchService}的控件
+     * 获取需要转化为{@link LoadSwitchService}的控件
      */
     @Override
     public View getSwitchRoot() {
@@ -342,6 +293,29 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     @Override
     public void onDispatcherMessage(int what, Bundle bundle) {
 
+    }
+
+    /**
+     * 处理fragment发送过来的数据
+     *
+     * @param what:事件类型
+     * @param data      事件传递的数据
+     */
+    @Override
+    public void onDispatcherMessage(int what, Object data) {
+
+    }
+
+
+    /**
+     * 提供数据给Fragment
+     *
+     * @param what:事件类型
+     * @return 事件传递的数据
+     */
+    @Override
+    public <T> T getDispatcherMessage(int what) {
+        return null;
     }
 
     public boolean getUserVisibleHint() {

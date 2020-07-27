@@ -84,6 +84,33 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
     }
 
     /**
+     * 处理fragment发送过来的数据
+     *
+     * @param what:事件类型
+     * @param data      事件传递的数据
+     */
+    override fun onDispatcherMessage(what: Int, data: Any?) {
+        viewModelProvider.forEach<ViewModel> {
+            if (it is BaseViewModel) {
+                it.onDispatcherMessage(what, data)
+            }
+        }
+    }
+
+    override fun <T : Any?> getDispatcherMessage(what: Int): T? {
+        var dd: Any? = null
+        viewModelProvider.forEach<ViewModel> {
+            if (it is BaseViewModel) {
+                dd = it.getDispatcherMessage(what)
+                if (dd != null) {
+                    return@forEach
+                }
+            }
+        }
+        return dd as T?
+    }
+
+    /**
      * 处理基础的事件
      */
     override fun handeBaseEventer(vm: BaseViewModel) {

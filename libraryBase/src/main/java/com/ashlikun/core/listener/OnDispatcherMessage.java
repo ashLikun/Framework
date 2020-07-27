@@ -17,4 +17,8 @@ public interface OnDispatcherMessage {
      * @param bundle    事件传递的数据
      */
     void onDispatcherMessage(int what, Bundle bundle);
+
+    void onDispatcherMessage(int what, Object object);
+
+    <T> T getDispatcherMessage(int what);
 }

@@ -173,6 +173,26 @@ public abstract class BasePresenter<T extends IBaseView> implements LifecycleObs
 
     }
 
+    /**
+     * 处理fragment发送过来的数据
+     *
+     * @param what:事件类型
+     * @param data      事件传递的数据
+     */
+    @Override
+    public void onDispatcherMessage(int what, Object data) {
+    }
+
+    /**
+     * 提供数据给Fragment
+     *
+     * @param what:事件类型
+     * @return 事件传递的数据
+     */
+    @Override
+    public <T> T getDispatcherMessage(int what) {
+        return null;
+    }
 
     /**
      * 对应Fragment,这个方法是Fragment才有的
