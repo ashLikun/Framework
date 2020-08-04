@@ -44,6 +44,13 @@ public class BaseUtils {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (loadLayoutListener == null) {
+                try {
+                    loadLayoutListener = (OnLoadLayoutListener) switchLayoutListener.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         if (loadLayoutListener == null) {
             loadLayoutListener = new DefaultOnLoadLayoutListener(context, window.getOnLoadSwitchClick());
@@ -51,4 +58,33 @@ public class BaseUtils {
         return loadLayoutListener;
     }
 
+    /**
+     * 获取设置的全局OnLoadLayoutListener
+     *
+     * @param context
+     * @return
+     */
+    public static OnLoadLayoutListener getSwitchLayoutListener(Context context, OnLoadSwitchClick click) {
+        OnLoadLayoutListener loadLayoutListener = null;
+        if (switchLayoutListener != null) {
+            try {
+                //获取构造函数
+                Constructor con = switchLayoutListener.getConstructor(Context.class, OnLoadSwitchClick.class);
+                loadLayoutListener = (OnLoadLayoutListener) con.newInstance(context, click);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (loadLayoutListener == null) {
+                try {
+                    loadLayoutListener = (OnLoadLayoutListener) switchLayoutListener.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (loadLayoutListener == null) {
+            loadLayoutListener = new DefaultOnLoadLayoutListener(context, click);
+        }
+        return loadLayoutListener;
+    }
 }
