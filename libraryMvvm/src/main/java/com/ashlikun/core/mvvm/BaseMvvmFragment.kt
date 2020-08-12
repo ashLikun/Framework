@@ -40,8 +40,8 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
         super.onCreate(savedInstanceState)
     }
 
-    override fun initLoadSwitch() {
-        super.initLoadSwitch()
+    override fun baseInitView() {
+        super.baseInitView()
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.loadSwitchService = switchService
