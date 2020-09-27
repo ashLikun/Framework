@@ -76,6 +76,6 @@ dependencies {
     }
     kapt 'com.alibaba:arouter-compiler:+'
 
-    implementation project(path: ':libraryMvvm')
+    api project(path: ':libraryMvvm')
     api project(path: ':libraryMvp')
 }

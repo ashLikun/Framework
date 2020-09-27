@@ -1,6 +1,6 @@
-[![Release](https://jitpack.io/v/ashLikun/CustomMvp.svg)](https://jitpack.io/#ashLikun/CustomMvp)
+[![Release](https://jitpack.io/v/ashLikun/Framework.svg)](https://jitpack.io/#ashLikun/Framework)
 
-CustomMvp项目简介
+Framework项目简介
     项目Mvp框架
     基类activity和fragment
 ## 使用方法
@@ -17,7 +17,7 @@ allprojects {
 
 ```gradle
 dependencies {
-    compile 'com.github.ashLikun:CustomMvp:{latest version}'
+    compile 'com.github.ashLikun:Framework:{latest version}'
 
 
 }
