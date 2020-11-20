@@ -13,39 +13,37 @@ import com.ashlikun.utils.other.LogUtils
  */
 class MainViewModel : BaseViewModel() {
     override fun onCreate() {
-        LogUtils.e("onCreate")
+        LogUtils.e("ViewModel onCreate ${System.identityHashCode(this)}")
         super.onCreate()
     }
 
-
-
     override fun onStart() {
         super.onStart()
-        LogUtils.e("onStart")
+        LogUtils.e("ViewModel onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        LogUtils.e("onResume")
+        LogUtils.e("ViewModel onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        LogUtils.e("onPause")
+        LogUtils.e("ViewModel onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        LogUtils.e("onStop")
+        LogUtils.e("ViewModel onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        LogUtils.e("onDestroy")
+        LogUtils.e("ViewModel onDestroy")
     }
 
     override fun onCleared() {
         super.onCleared()
-        LogUtils.e("onCleared")
+        LogUtils.e("ViewModel onCleared")
     }
 }

@@ -21,6 +21,7 @@ import com.ashlikun.loadswitch.LoadSwitchService;
 import com.ashlikun.loadswitch.OnLoadSwitchClick;
 import com.ashlikun.okhttputils.http.OkHttpUtils;
 import com.ashlikun.supertoobar.SuperToolBar;
+import com.ashlikun.utils.bug.BugUtils;
 import com.ashlikun.utils.ui.StatusBarCompat;
 
 /**
@@ -50,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        BugUtils.orientationBug8_0(this);
         super.onCreate(savedInstanceState);
         if (getIntent() == null) {
             setIntent(new Intent());

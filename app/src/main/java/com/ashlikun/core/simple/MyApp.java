@@ -24,5 +24,6 @@ public class MyApp extends MultiDexApplication {
         ARouter.init(this);
         LiteOrmUtil.init(this);
         OkHttpUtils.init(null);
+
     }
 }

@@ -16,7 +16,7 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        LogUtils.e("onCreate")
+        LogUtils.e("onCreate ${System.identityHashCode(this)}")
         super.onCreate(savedInstanceState)
     }
 
@@ -27,16 +27,16 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
 
 
     override fun initView() {
-        if (supportFragmentManager.fragments.size == 0) {
-            val f1 = Main2Fragment()
-            val f2 = Main2Fragment()
-            LogUtils.e("initView")
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment, f1)
-//                .add(R.id.fragment, f2)
-
-                    .commit()
-        }
+//        if (supportFragmentManager.fragments.size == 0) {
+//            val f1 = Main2Fragment()
+//            val f2 = Main2Fragment()
+//            LogUtils.e("initView")
+//            supportFragmentManager.beginTransaction()
+//                    .add(R.id.fragment, f1)
+////                .add(R.id.fragment, f2)
+//
+//                    .commit()
+//        }
     }
 
     override fun parseIntent(intent: Intent) {

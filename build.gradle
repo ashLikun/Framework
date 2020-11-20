@@ -29,7 +29,7 @@ ext {
     compileSdkVersion = 28
     buildToolsVersion = "28.0.3"
     designVersion = "com.google.android.material:material:" + superVersion
-    targetSdkVersion = 24
+    targetSdkVersion = 26
     minSdkVersion = 16
     versionCode = 1
     versionName = "0.0.1"
