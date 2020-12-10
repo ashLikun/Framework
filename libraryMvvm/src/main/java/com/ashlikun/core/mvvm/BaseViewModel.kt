@@ -84,27 +84,27 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     }
 
     open fun clearData() {
-        clearData.postValue("")
+        clearData.value = ""
     }
 
     open fun finish() {
-        finish.postValue("")
+        finish.value = ""
     }
 
     open fun showLoading(contextData: ContextData) {
-        showLoading.postValue(contextData)
+        showLoading.value = contextData
     }
 
     open fun showContent(str: String = "") {
-        showContent.postValue(str)
+        showContent.value = str
     }
 
     open fun showEmpty(contextData: ContextData) {
-        showEmpty.postValue(contextData)
+        showEmpty.value = contextData
     }
 
     open fun showRetry(contextData: ContextData) {
-        showRetry.postValue(contextData)
+        showRetry.value = contextData
     }
 
     /**

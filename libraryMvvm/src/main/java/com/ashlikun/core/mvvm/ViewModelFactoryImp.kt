@@ -77,7 +77,7 @@ open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
             //处理vm的公共事件
             mvvmBaseInterface?.handeBaseEventer(model)
             //vm监听Activity或者Fragment的生命周期
-            model.addObserver.postValue(model)
+            model.addObserver.value = model
         }
     }
 
