@@ -19,6 +19,7 @@ import com.ashlikun.utils.ui.ActivityManager
  *
  * 功能介绍：VM 的基础,自动感知生命周期
  */
+
 open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcherMessage {
     //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常
     //标记是否与宿主断开，就是宿主是否销毁（准备开始重建）

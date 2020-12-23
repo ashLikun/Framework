@@ -27,5 +27,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+dependencies {
+    //viewmodel
+    compileOnly 'androidx.lifecycle:lifecycle-viewmodel-ktx:+'
+}
 apply from: '../maven.gradle'
 apply from: '../dependencies.gradle'
