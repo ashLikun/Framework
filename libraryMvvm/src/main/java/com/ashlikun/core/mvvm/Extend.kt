@@ -21,6 +21,7 @@ inline fun <T> ViewModel.launch(context: CoroutineContext = EmptyCoroutineContex
         delay(delayTime)
         job()
     } catch (ext: Exception) {
+        ext.printStackTrace()
     }
 }
 
