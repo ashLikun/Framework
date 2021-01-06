@@ -27,7 +27,7 @@ inline fun <T> ViewModel.launch(context: CoroutineContext = EmptyCoroutineContex
     }
 }
 
-inline fun <T> ViewModel.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
+inline fun <T> ViewModel.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
     return viewModelScope.async(context) {
         delay(delayTime)
         job()
@@ -40,7 +40,7 @@ inline fun <T> ComponentActivity.launch(context: CoroutineContext = EmptyCorouti
     return viewModelScope.launch(context, delayTime, job)
 }
 
-inline fun <T> ComponentActivity.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
+inline fun <T> ComponentActivity.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
     val viewModelScope = ViewModelProvider(this, newInstanceFactory).get(ViewModelScope::class.java)
     return viewModelScope.async(context, delayTime, job)
 }
@@ -50,7 +50,7 @@ inline fun <T> Fragment.launch(context: CoroutineContext = EmptyCoroutineContext
     return viewModelScope.launch(context, delayTime, job)
 }
 
-inline fun <T> Fragment.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
+inline fun <T> Fragment.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
     val viewModelScope = ViewModelProvider(this, newInstanceFactory).get(ViewModelScope::class.java)
     return viewModelScope.async(context, delayTime, job)
 }
