@@ -50,7 +50,6 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
     override fun parseIntent(intent: Intent) {
         super.parseIntent(intent)
         if (intent != null) {
-            viewModel.parseIntent(intent)
             viewModelProvider.forEach<ViewModel> {
                 if (it is BaseViewModel) {
                     it.parseIntent(intent)
