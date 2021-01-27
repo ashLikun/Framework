@@ -148,6 +148,13 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     }
 
     /**
+     * onNewIntent 触发的调用
+     */
+    open fun newData() {
+        
+    }
+
+    /**
      * 获取前台Activity
      */
     open fun getActivity(): Activity? = ActivityUtils.getActivity(context)

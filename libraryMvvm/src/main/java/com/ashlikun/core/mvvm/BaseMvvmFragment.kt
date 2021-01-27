@@ -70,6 +70,7 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
         }
     }
 
+
     protected open fun initViewModel() {
 
     }

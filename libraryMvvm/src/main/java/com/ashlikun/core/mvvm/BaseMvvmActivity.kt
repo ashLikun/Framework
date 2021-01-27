@@ -59,6 +59,17 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
     }
 
     /**
+     * onNewIntent 触发的调用
+     */
+    override fun newData() {
+        viewModelProvider.forEach<ViewModel> {
+            if (it is BaseViewModel) {
+                it.newData()
+            }
+        }
+    }
+
+    /**
      * 这里可以对其他的View
      */
     protected open fun initViewModel() {

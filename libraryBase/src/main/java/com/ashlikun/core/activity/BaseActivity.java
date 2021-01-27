@@ -73,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
         }
         setIntent(intent);
         parseIntent(intent);
-        initData();
+        newData();
     }
 
     /**
@@ -144,6 +144,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
      * 初始化数据
      */
     protected void initData() {
+
+    }
+
+    /**
+     * onNewIntent 触发的调用
+     */
+    protected void newData() {
 
     }
 
