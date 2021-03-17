@@ -50,19 +50,21 @@ dependencies {
     implementation rootProject.ext.designVersion
     //viewmodel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:+'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:+'
     implementation 'androidx.fragment:fragment:1.3.+'
+    implementation 'androidx.activity:activity-ktx:+'
     implementation 'androidx.multidex:multidex:2.0.1'
     //数字进度条
-    implementation 'com.github.ashLikun.frame:numberprogressbar:3.0.0'
+    implementation 'com.github.ashLikun.frame:numberprogressbar:3.1.9'
     implementation 'com.github.ashLikun:CircleProgressView:+'
     //按钮
-    implementation 'com.github.ashLikun.frame:flatbutton:3.0.0'
-    //MD风格的进度条
-    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
+    implementation 'com.github.ashLikun.frame:flatbutton:3.1.9'
+//    MD风格的进度条
+//    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
     //公共工具
     implementation 'com.github.ashLikun:CommonUtils:+'
     //标题栏
-    implementation 'com.github.ashLikun.frame:supertoobar:3.0.0'
+    implementation 'com.github.ashLikun.frame:supertoobar:3.1.9'
     //习惯的对话框
     implementation 'com.github.ashLikun:CustomDialog:+'
     //布局切换神器

@@ -2,9 +2,7 @@ package com.ashlikun.core.mvvm
 
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -15,46 +13,39 @@ import kotlin.coroutines.EmptyCoroutineContext
  * 无阻塞的
  */
 inline fun <T> ViewModel.launch(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
-    var ct = context
-    if (ct !is CoroutineExceptionHandler) {
-        ct = context + CoroutineExceptionHandler { _, t ->
-            t.printStackTrace()
-        }
-    }
-    return viewModelScope.launch(ct) {
+    return viewModelScope.launch(checkCoroutineExceptionHandler(context)) {
         delay(delayTime)
         job()
     }
 }
 
 inline fun <T> ViewModel.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
-    return viewModelScope.async(context) {
+    return viewModelScope.async(checkCoroutineExceptionHandler(context)) {
         delay(delayTime)
         job()
     }
 }
 
-val newInstanceFactory by lazy { ViewModelProvider.NewInstanceFactory() }
-inline fun <T> ComponentActivity.launch(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
-    val viewModelScope = ViewModelProvider(this, newInstanceFactory).get(ViewModelScope::class.java)
-    return viewModelScope.launch(context, delayTime, job)
+inline fun <T> LifecycleOwner.launch(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
+    return lifecycleScope.launch(checkCoroutineExceptionHandler(context)) {
+        delay(delayTime)
+        job()
+    }
 }
 
-inline fun <T> ComponentActivity.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
-    val viewModelScope = ViewModelProvider(this, newInstanceFactory).get(ViewModelScope::class.java)
-    return viewModelScope.async(context, delayTime, job)
+inline fun <T> LifecycleOwner.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
+    return lifecycleScope.async(checkCoroutineExceptionHandler(context)) {
+        delay(delayTime)
+        job()
+    }
 }
 
-inline fun <T> Fragment.launch(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Job {
-    val viewModelScope = ViewModelProvider(this, newInstanceFactory).get(ViewModelScope::class.java)
-    return viewModelScope.launch(context, delayTime, job)
-}
-
-inline fun <T> Fragment.async(context: CoroutineContext = EmptyCoroutineContext, delayTime: Long = 0, noinline job: suspend () -> T): Deferred<T> {
-    val viewModelScope = ViewModelProvider(this, newInstanceFactory).get(ViewModelScope::class.java)
-    return viewModelScope.async(context, delayTime, job)
-}
-
-internal class ViewModelScope() : ViewModel() {
-
+inline fun checkCoroutineExceptionHandler(context: CoroutineContext): CoroutineContext {
+    var ct = context
+    if (context[CoroutineExceptionHandler.Key] == null) {
+        ct = context + CoroutineExceptionHandler { _, t ->
+            t.printStackTrace()
+        }
+    }
+    return ct
 }

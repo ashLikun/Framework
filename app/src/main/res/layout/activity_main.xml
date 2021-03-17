@@ -15,8 +15,16 @@
         android:text="1111111111\n2222222222\n3333333333\n444444444444"
         android:textColor="#ffffff" />
 
+    <Button
+        android:onClick="onclick1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="111"></Button>
+
     <FrameLayout
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
+
+
 </LinearLayout>

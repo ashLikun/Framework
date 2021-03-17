@@ -151,7 +151,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      * onNewIntent 触发的调用
      */
     open fun newData() {
-        
+
     }
 
     /**
