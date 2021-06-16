@@ -203,10 +203,16 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     /**
      * 通过指定的数据实体类获取对应的MutableLiveData类
      */
-    open operator fun <T> get(clazz: Class<T>) = lifeDataProvider[clazz]
+    open operator fun <T> get(clazz: Class<T>): MutableLiveData<T> = lifeDataProvider[clazz]
 
     /**
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
     open operator fun <T> get(key: String?, clazz: Class<T>) = lifeDataProvider[key, clazz]
+
+    /**
+     * 简化版
+     * 通过指定的key或者数据实体类获取对应的MutableLiveData类
+     */
+    inline fun <reified T> get(key: String? = null): MutableLiveData<T> = lifeDataProvider[key, T::class.java]
 }

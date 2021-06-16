@@ -19,14 +19,14 @@ class LiveDataProvider {
     /**
      * 通过指定的数据实体类获取对应的MutableLiveData类
      */
-    open operator fun <T> get(clazz: Class<T>): MutableLiveData<T>? {
+    open operator fun <T> get(clazz: Class<T>): MutableLiveData<T> {
         return get(null, clazz)
     }
 
     /**
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
-    open operator fun <T> get(key: String?, clazz: Class<T>): MutableLiveData<T>? {
+    open operator fun <T> get(key: String?, clazz: Class<T>): MutableLiveData<T> {
         var keyName: String = key ?: clazz.canonicalName
         var mutableLiveData: MutableLiveData<T>? = maps[keyName] as MutableLiveData<T>?
         //1.判断集合是否已经存在livedata对象
