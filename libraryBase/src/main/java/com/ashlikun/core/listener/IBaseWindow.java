@@ -1,7 +1,9 @@
 package com.ashlikun.core.listener;
 
-import androidx.annotation.IdRes;
 import android.view.View;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 
 import com.ashlikun.loadswitch.ContextData;
 import com.ashlikun.loadswitch.LoadSwitchService;
@@ -17,20 +19,33 @@ import com.ashlikun.loadswitch.OnLoadSwitchClick;
 
 public interface IBaseWindow extends OnLoadSwitchClick {
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:06
-     * <p>
-     * 方法功能：获取布局id
+     * 获取布局id
+     * 优先使用
      */
-    int getLayoutId();
+    default int getLayoutId() {
+        return View.NO_ID;
+    }
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:16
-     * <p>
-     * 方法功能：初始化view
+     * 获取布局view
+     * 次优先使用
+     * @return
+     */
+    default @NonNull View getContentView() {
+        return null;
+    }
+
+
+    /**
+     * 初始化view
      */
     void initView();
+
+    /**
+     * 初始化数据
+     */
+    default void initData() {
+    }
 
     /**
      * 获取需要转化为{@link LoadSwitchService}的控件
@@ -40,10 +55,7 @@ public interface IBaseWindow extends OnLoadSwitchClick {
     View getSwitchRoot();
 
     /**
-     * 作者　　: 李坤
-     * 创建时间: 2016/9/22 11:07
-     * <p>
-     * 方法功能：显示不同的界面布局 监听器
+     * 显示不同的界面布局 监听器
      */
     OnLoadSwitchClick getOnLoadSwitchClick();
 

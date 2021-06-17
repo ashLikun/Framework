@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.View
 import com.ashlikun.core.simple.R
 import com.ashlikun.core.activity.BaseMvpActivity
 
@@ -20,6 +21,7 @@ class MainActivity : BaseMvpActivity<MainPresenter>(), IMainView {
         return R.layout.activity_main_mvp
 
     }
+
 
     override fun initView() {
         Log.e("MainActivity", "initView")

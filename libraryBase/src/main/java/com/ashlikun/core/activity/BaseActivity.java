@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +35,6 @@ import com.ashlikun.utils.ui.StatusBarCompat;
 
 public abstract class BaseActivity extends AppCompatActivity implements IBaseWindow, OnDispatcherMessage {
 
-
     /**
      * 请求CODE
      */
@@ -47,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
      */
     public LoadSwitchService switchService = null;
     protected SuperToolBar toolbar;
+    protected View switchRoot;
     protected StatusBarCompat statusBar;
 
     @Override
@@ -57,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
             setIntent(new Intent());
         }
         parseIntent(getIntent());
-        setActivityContentView(getLayoutId());
+        setActivityContentView();
         setStatueBar();
         baseInitView();
         initView();
@@ -95,8 +94,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     /**
      * 设置activity的布局，可以重写
      */
-    protected void setActivityContentView(@LayoutRes int layoutId) {
-        setContentView(layoutId);
+    protected void setActivityContentView() {
+        int layoutId = getLayoutId();
+        if (layoutId != View.NO_ID) {
+            setContentView(layoutId);
+        } else {
+            setContentView(getContentView());
+        }
     }
 
     /**
@@ -104,6 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
      */
     protected void baseInitView() {
         toolbar = f(R.id.toolbar);
+        switchRoot = f(R.id.switchRoot);
         initLoadSwitch();
     }
 
@@ -128,24 +133,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
         }
     }
 
-    /**
-     * 获取布局id
-     */
-    @Override
-    public abstract int getLayoutId();
-
-    /**
-     * 初始化view
-     */
-    @Override
-    public abstract void initView();
-
-    /**
-     * 初始化数据
-     */
-    protected void initData() {
-
-    }
 
     /**
      * onNewIntent 触发的调用
@@ -206,7 +193,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     @Override
     public OnLoadSwitchClick getOnLoadSwitchClick() {
         if (this instanceof OnLoadSwitchClick) {
-            return (OnLoadSwitchClick) this;
+            return this;
         } else {
             return null;
         }
@@ -217,7 +204,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
      */
     @Override
     public View getSwitchRoot() {
-        return f(R.id.switchRoot);
+        return switchRoot;
     }
 
     @Override

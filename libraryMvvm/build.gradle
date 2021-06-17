@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 // 使用Kotlin插件
 apply plugin: 'kotlin-android'
-// 使用Kotlin Android扩展插件
-apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -23,8 +21,11 @@ android {
     compileOptions {
         //定义生成的META-INF/library_release文件名 More than one file was found with OS independent path 'META-INF/library_release.kotlin_module'
         kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core.mvvm']
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 dependencies {
