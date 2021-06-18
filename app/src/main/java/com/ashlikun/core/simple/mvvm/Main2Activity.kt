@@ -2,19 +2,25 @@ package com.ashlikun.core.simple.mvvm
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import com.ashlikun.core.mvvm.BaseMvvmActivity
 import com.ashlikun.core.mvvm.IViewModel
 import com.ashlikun.core.mvvm.launch
+import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.utils.other.LogUtils
-import com.ashlikun.core.simple.R
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineName
-import kotlin.coroutines.EmptyCoroutineContext
 
 @IViewModel(MainViewModel::class)
 class Main2Activity : BaseMvvmActivity<MainViewModel>() {
+    val viewBinding by lazy {
+        val aaa = System.currentTimeMillis()
+        val aa = ActivityMainBinding.inflate(layoutInflater)
+        Log.e("addssssssssss", (System.currentTimeMillis() - aaa).toString() )
+        aa
+    }
+
     override fun initViewModel() {
         super.initViewModel()
         LogUtils.e("initViewModel")
@@ -25,13 +31,8 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun getLayoutId(): Int {
-        LogUtils.e("getLayoutId")
-        return R.layout.activity_main
-    }
-
     fun onclick1(v: View) {
-        launch(context =  CoroutineExceptionHandler { _, t ->
+        launch(context = CoroutineExceptionHandler { _, t ->
             t.printStackTrace()
         }) { }
     }

@@ -48,8 +48,6 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
     /**
      * 宿主activity
      */
-
-
     protected Activity activity;
     protected Context context;
     /**
@@ -107,6 +105,10 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
             rootView = UiUtils.getInflaterView(activity, getLayoutId());
         } else {
             rootView = getContentView();
+            if (rootView == null) {
+                //通过反射获取ViewBinding
+                rootView = BaseUtils.getViewBindingView(this);
+            }
         }
     }
 

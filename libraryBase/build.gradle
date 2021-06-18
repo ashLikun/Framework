@@ -32,6 +32,7 @@ dependencies {
     compileOnly 'com.github.ashLikun:LoadSwitch:+'
     compileOnly 'com.github.ashLikun:OkHttpUtils:+'
     compileOnly 'com.alibaba:arouter-api:+'
+    compileOnly 'androidx.databinding:viewbinding:+'
 }
 
 apply from: '../maven.gradle'

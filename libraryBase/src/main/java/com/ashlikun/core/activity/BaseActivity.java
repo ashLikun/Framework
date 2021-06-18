@@ -99,7 +99,16 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
         if (layoutId != View.NO_ID) {
             setContentView(layoutId);
         } else {
-            setContentView(getContentView());
+            View view = getContentView();
+            if (view != null) {
+                setContentView(view);
+            } else {
+                //通过反射获取ViewBinding
+                view = BaseUtils.getViewBindingView(this);
+                if (view != null) {
+                    setContentView(view);
+                }
+            }
         }
     }
 

@@ -7,19 +7,18 @@ import android.util.Log
 import android.view.View
 import com.ashlikun.core.simple.R
 import com.ashlikun.core.activity.BaseMvpActivity
+import com.ashlikun.core.simple.databinding.ActivityMainBinding
+import com.ashlikun.core.simple.databinding.ActivityMainMvpBinding
 
 class MainActivity : BaseMvpActivity<MainPresenter>(), IMainView {
 
+    val viewBinding by lazy {
+        ActivityMainMvpBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         Log.e("MainActivity", "onCreate")
-    }
-
-    override fun getLayoutId(): Int {
-        Log.e("MainActivity", "getLayoutId")
-        return R.layout.activity_main_mvp
-
     }
 
 
