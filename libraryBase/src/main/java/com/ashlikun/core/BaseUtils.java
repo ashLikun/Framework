@@ -1,7 +1,9 @@
 package com.ashlikun.core;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.viewbinding.ViewBinding;
 
@@ -14,6 +16,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 /**
@@ -111,7 +114,10 @@ public class BaseUtils {
             }
             Class objCls = object.getClass();
             //查找缓存
-            AccessibleObject accessibleObject = viewBindingGetMap.get(objCls);
+            AccessibleObject accessibleObject = null;
+            if (viewBindingGetMap != null) {
+                accessibleObject = viewBindingGetMap.get(objCls);
+            }
             if (accessibleObject != null) {
                 accessibleObject.setAccessible(true);
                 if (accessibleObject instanceof Method) {
@@ -128,6 +134,9 @@ public class BaseUtils {
                     if (viewBindingCls.isAssignableFrom(f.getType())) {
                         f.setAccessible(true);
                         View view = ((ViewBinding) f.get(object)).getRoot();
+                        if (viewBindingGetMap == null) {
+                            viewBindingGetMap = new HashMap<>();
+                        }
                         viewBindingGetMap.put(objCls, f);
                         return view;
                     }
@@ -138,6 +147,9 @@ public class BaseUtils {
                     if (viewBindingCls.isAssignableFrom(m.getReturnType())) {
                         m.setAccessible(true);
                         View view = ((ViewBinding) m.invoke(object)).getRoot();
+                        if (viewBindingGetMap == null) {
+                            viewBindingGetMap = new HashMap<>();
+                        }
                         viewBindingGetMap.put(objCls, m);
                         return view;
                     }
@@ -149,6 +161,81 @@ public class BaseUtils {
             return null;
         } catch (NoClassDefFoundError e) {
             return null;
+        }
+        return null;
+    }
+
+    /**
+     * 获取1个参数的静态方法
+     */
+    public static View getViewToViewBindingClass(Class cls, LayoutInflater layoutInflater) {
+        Object viewBindingToClass = getViewBindingToClass(cls, layoutInflater);
+        try {
+            if (viewBindingToClass != null) {
+                if (viewBindingToClass instanceof ViewBinding) {
+                    ViewBinding bb = (ViewBinding) viewBindingToClass;
+                    return bb.getRoot();
+                }
+            }
+        } catch (NoClassDefFoundError e) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * 获取1个参数的静态方法
+     *
+     * @return ViewBinding
+     */
+    public static Object getViewBindingToClass(Class cls, LayoutInflater layoutInflater) {
+        if (cls == null || layoutInflater == null) {
+            return null;
+        }
+        boolean isCache = false;
+        //从缓存获取
+        try {
+            Method inflate = null;
+            if (viewBindingGetMap != null) {
+                AccessibleObject aa = viewBindingGetMap.get(cls);
+                if (aa instanceof Method) {
+                    isCache = true;
+                    inflate = (Method) aa;
+                }
+            }
+            if (inflate != null) {
+                inflate = cls.getDeclaredMethod("inflate", LayoutInflater.class);
+            }
+            //这里循环全部方法是为了混淆的时候无影响
+            if (inflate == null) {
+                Method[] declaredMethods = cls.getDeclaredMethods();
+                for (Method declaredMethod : declaredMethods) {
+                    int modifiers = declaredMethod.getModifiers();
+                    if (Modifier.isStatic(modifiers)) {
+                        Class<?>[] parameterTypes = declaredMethod.getParameterTypes();
+                        if (parameterTypes != null && parameterTypes.length == 3) {
+                            if (LayoutInflater.class.isAssignableFrom(parameterTypes[0]) &&
+                                    ViewGroup.class.isAssignableFrom(parameterTypes[1]) &&
+                                    boolean.class.isAssignableFrom(parameterTypes[2])) {
+                                inflate = declaredMethod;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (inflate != null) {
+                //添加到缓存
+                if (isCache) {
+                    if (viewBindingGetMap == null) {
+                        viewBindingGetMap = new HashMap<>();
+                    }
+                    viewBindingGetMap.put(cls, inflate);
+                }
+                return inflate.invoke(null, layoutInflater);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

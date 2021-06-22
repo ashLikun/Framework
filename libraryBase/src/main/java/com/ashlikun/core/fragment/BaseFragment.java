@@ -42,7 +42,6 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
     /**
      * 请求CODE
      */
-
     public int REQUEST_CODE = Math.abs(this.getClass().getSimpleName().hashCode() % 60000);
 
     /**
@@ -67,6 +66,10 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
 
     protected SuperToolBar toolbar;
     protected View switchRoot;
+    /**
+     * ViewBinding的Class
+     */
+    protected Class viewBindingClass;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,7 +110,12 @@ public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDi
             rootView = getContentView();
             if (rootView == null) {
                 //通过反射获取ViewBinding
-                rootView = BaseUtils.getViewBindingView(this);
+                if (viewBindingClass != null) {
+                    rootView = BaseUtils.getViewToViewBindingClass(viewBindingClass, getLayoutInflater());
+                }
+                if (rootView == null) {
+                    rootView = BaseUtils.getViewBindingView(this);
+                }
             }
         }
     }

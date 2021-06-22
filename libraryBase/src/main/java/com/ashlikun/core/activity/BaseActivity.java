@@ -47,6 +47,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
     protected SuperToolBar toolbar;
     protected View switchRoot;
     protected StatusBarCompat statusBar;
+    /**
+     * ViewBinding的Class
+     */
+    protected Class viewBindingClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +108,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseWin
                 setContentView(view);
             } else {
                 //通过反射获取ViewBinding
-                view = BaseUtils.getViewBindingView(this);
+                if (viewBindingClass != null) {
+                    view = BaseUtils.getViewToViewBindingClass(viewBindingClass, getLayoutInflater());
+                }
+                if (view == null) {
+                    view = BaseUtils.getViewBindingView(this);
+                }
                 if (view != null) {
                     setContentView(view);
                 }
