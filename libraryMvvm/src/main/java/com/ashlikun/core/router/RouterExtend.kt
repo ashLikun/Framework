@@ -72,7 +72,7 @@ fun Postcard.navigation(
 /**
  * 添加map参数
  */
-fun Postcard.wiMap(params: Map<String, Any?>? = null): Postcard {
+fun Postcard.withMap(params: Map<String, Any?>? = null): Postcard {
     val bb = params?.toBundle()
     if (extras == null) {
         with(bb)
