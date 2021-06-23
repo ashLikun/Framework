@@ -37,7 +37,6 @@ import com.ashlikun.utils.ui.UiUtils;
  * @see IBaseWindow : 只要是窗口都会实现这个统一接口
  * @see OnDispatcherMessage : Fragment处理其他(Activity)发送的事件
  */
-
 public abstract class BaseFragment extends Fragment implements IBaseWindow, OnDispatcherMessage {
     /**
      * 请求CODE

@@ -9,5 +9,6 @@ dependencies {
     compileOnly 'com.github.ashLikun:LoadSwitch:+'
     compileOnly 'com.github.ashLikun:OkHttpUtils:+'
     compileOnly 'com.alibaba:arouter-api:+'
+    compileOnly 'com.google.code.gson:gson:2.8.5'
     api project(path: ':libraryBase')
 }
