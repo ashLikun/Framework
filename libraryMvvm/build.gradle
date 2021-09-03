@@ -30,8 +30,8 @@ android {
 }
 dependencies {
     //viewmodel
-    compileOnly 'androidx.lifecycle:lifecycle-viewmodel-ktx:+'
-    compileOnly 'androidx.lifecycle:lifecycle-runtime-ktx:+'
+    compileOnly 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    compileOnly 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     compileOnly 'androidx.fragment:fragment:1.3.+'
 }
 apply from: '../maven.gradle'

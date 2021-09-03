@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ashlikun.utils.other.LogUtils
 import java.lang.reflect.ParameterizedType
@@ -21,7 +22,7 @@ import kotlin.reflect.KClass
 open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
     : ViewModelProvider.NewInstanceFactory() {
 
-    override fun <T : androidx.lifecycle.ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val model = super.create(modelClass)
         initModel(model)
         return model
