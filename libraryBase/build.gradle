@@ -26,7 +26,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation rootProject.ext.designVersion
+    compileOnly rootProject.ext.designVersion
     compileOnly 'com.github.ashLikun.frame:supertoobar:3.1.9'
     compileOnly 'com.github.ashLikun:CommonUtils:+'
     compileOnly 'com.github.ashLikun:LoadSwitch:+'
