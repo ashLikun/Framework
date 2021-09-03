@@ -42,10 +42,10 @@ inline fun <T> LifecycleOwner.async(context: CoroutineContext = EmptyCoroutineCo
 
 inline fun checkCoroutineExceptionHandler(context: CoroutineContext): CoroutineContext {
     var ct = context
-    if (context[CoroutineExceptionHandler.Key] == null) {
-        ct = context + CoroutineExceptionHandler { _, t ->
-            t.printStackTrace()
-        }
-    }
+//    if (context[CoroutineExceptionHandler.Key] == null) {
+//        ct = context + CoroutineExceptionHandler { _, t ->
+//            t.printStackTrace()
+//        }
+//    }
     return ct
 }
