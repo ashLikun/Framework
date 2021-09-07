@@ -11,13 +11,15 @@ import com.ashlikun.core.mvvm.launch
 import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.utils.other.LogUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
+import java.lang.NullPointerException
+import kotlin.math.log
 
 @IViewModel(MainViewModel::class)
 class Main2Activity : BaseMvvmActivity<MainViewModel>() {
     val viewBinding by lazy {
         val aaa = System.currentTimeMillis()
         val aa = ActivityMainBinding.inflate(layoutInflater)
-        Log.e("addssssssssss", (System.currentTimeMillis() - aaa).toString() )
+        Log.e("addssssssssss", (System.currentTimeMillis() - aaa).toString())
         aa
     }
 
@@ -33,8 +35,11 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
 
     fun onclick1(v: View) {
         launch(context = CoroutineExceptionHandler { _, t ->
+            Log.e("Main2Activity", "onclick1: 11111")
             t.printStackTrace()
-        }) { }
+        }) {
+            throw NullPointerException()
+        }
     }
 
     override fun initView() {

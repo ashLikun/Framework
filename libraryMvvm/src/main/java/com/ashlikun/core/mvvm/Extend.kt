@@ -3,6 +3,7 @@ package com.ashlikun.core.mvvm
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import com.ashlikun.core.BaseUtils
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -43,9 +44,15 @@ inline fun <T> LifecycleOwner.async(context: CoroutineContext = EmptyCoroutineCo
 inline fun checkCoroutineExceptionHandler(context: CoroutineContext): CoroutineContext {
     var ct = context
 //    if (context[CoroutineExceptionHandler.Key] == null) {
-//        ct = context + CoroutineExceptionHandler { _, t ->
-//            t.printStackTrace()
-//        }
+//    CoroutineExceptionHandler { _, t ->
+//        t.printStackTrace()
+//    }
+    //如果沒有处理错误的时候
+    if (context[CoroutineExceptionHandler.Key] == null) {
+        if (BaseUtils.coroutineExceptionHandler != null && BaseUtils.coroutineExceptionHandler is CoroutineExceptionHandler) {
+            ct = context + BaseUtils.coroutineExceptionHandler as CoroutineExceptionHandler
+        }
+    }
 //    }
     return ct
 }

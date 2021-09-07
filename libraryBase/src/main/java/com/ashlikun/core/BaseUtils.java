@@ -33,6 +33,14 @@ public class BaseUtils {
     public static Class<? extends OnLoadLayoutListener> switchLayoutListener = null;
     private static HashMap<Class, AccessibleObject> viewBindingGetMap;
 
+    /**
+     * 本框架协成默认错误的处理,如果调用者处理了，那么这里不会调用
+     * CoroutineExceptionHandler { _, t ->
+     * t.printStackTrace()
+     * }
+     */
+    public static Object coroutineExceptionHandler;
+
 
     public static void init(Class<? extends OnLoadLayoutListener> listener) {
         switchLayoutListener = listener;
