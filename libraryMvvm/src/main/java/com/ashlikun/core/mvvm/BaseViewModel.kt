@@ -11,6 +11,7 @@ import com.ashlikun.loadswitch.LoadSwitchService
 import com.ashlikun.okhttputils.http.OkHttpUtils
 import com.ashlikun.utils.main.ActivityUtils
 import com.ashlikun.utils.ui.ActivityManager
+import kotlin.reflect.KClass
 
 /**
  * 作者　　: 李坤
@@ -158,7 +159,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      * 获取前台Activity
      */
     open fun getActivity(): Activity? = ActivityUtils.getActivity(context)
-            ?: ActivityManager.getForegroundActivity()
+        ?: ActivityManager.getForegroundActivity()
 
     /**
      * UI发送过来的事件
@@ -203,16 +204,30 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
     /**
      * 通过指定的数据实体类获取对应的MutableLiveData类
      */
+    @Deprecated("使用kclass")
     open operator fun <T> get(clazz: Class<T>): MutableLiveData<T> = lifeDataProvider[clazz]
 
     /**
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
+    @Deprecated("使用kclass")
     open operator fun <T> get(key: String?, clazz: Class<T>) = lifeDataProvider[key, clazz]
+
+    /**
+     * 通过指定的数据实体类获取对应的MutableLiveData类
+     */
+    open operator fun <T : Any> get(clazz: KClass<T>): MutableLiveData<T> = lifeDataProvider[clazz]
+
+    /**
+     * 通过指定的key或者数据实体类获取对应的MutableLiveData类
+     */
+    open operator fun <T : Any> get(key: String?, clazz: KClass<T>) = lifeDataProvider[key, clazz]
 
     /**
      * 简化版
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
-    inline fun <reified T> get(key: String? = null): MutableLiveData<T> = lifeDataProvider[key, T::class.java]
+    inline fun <reified T : Any> get(key: String? = null): MutableLiveData<T> =
+        lifeDataProvider[key, T::class]
+
 }

@@ -16,7 +16,7 @@ class MainViewModel : BaseViewModel() {
     val mainData: MutableLiveData<List<String>> by lazy {
         get()
     }
-
+    val mainData2 = get(List::class.java)
     override fun onCreate() {
         LogUtils.e("ViewModel onCreate ${System.identityHashCode(this)}")
         super.onCreate()
