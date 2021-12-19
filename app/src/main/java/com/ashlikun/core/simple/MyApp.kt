@@ -20,7 +20,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 class MyApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
-        AppUtils.setDebug(true)
+        AppUtils.isDebug = true
         AppUtils.init(this)
         ARouter.init(this)
         LiteOrmUtil.init(this)

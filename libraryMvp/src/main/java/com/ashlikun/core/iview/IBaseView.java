@@ -25,7 +25,9 @@ public interface IBaseView {
      * 获取自动切换加载中布局的管理器
      */
 
-    LoadSwitchService getSwitchService();
+    default LoadSwitchService getSwitchService() {
+        return null;
+    }
 
     /**
      * 显示加载中布局

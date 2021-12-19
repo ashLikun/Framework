@@ -77,7 +77,7 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
 
     }
 
-    override fun onDispatcherMessage(what: Int, bundle: Bundle?) {
+    override fun onDispatcherMessage(what: Int, bundle: Bundle) {
         super.onDispatcherMessage(what, bundle)
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
@@ -92,7 +92,7 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
      * @param what:事件类型
      * @param data      事件传递的数据
      */
-    override fun onDispatcherMessage(what: Int, data: Any?) {
+    override fun onDispatcherMessage(what: Int, data: Any) {
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.onDispatcherMessage(what, data)

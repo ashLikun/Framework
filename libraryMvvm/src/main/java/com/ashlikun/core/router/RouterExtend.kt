@@ -44,11 +44,11 @@ fun Postcard.addFlag(flag: Int): Postcard {
 }
 
 fun Postcard.navigation(
-        context: Context? = ActivityManager.getInstance().currentActivity(),
-        onArrival: OnNvCallback? = null,
-        onLost: OnNvCallback? = null,
-        onInterrupt: OnNvCallback? = null,
-        onFound: OnNvCallback? = null,
+    context: Context? = ActivityManager.get().currentActivity(),
+    onArrival: OnNvCallback? = null,
+    onLost: OnNvCallback? = null,
+    onInterrupt: OnNvCallback? = null,
+    onFound: OnNvCallback? = null,
 ) {
     navigation(context, if (onFound == null) null else object : NavigationCallback {
         override fun onFound(postcard: Postcard) {
@@ -121,22 +121,40 @@ fun Map<String, Any?>.toBundle(): Bundle {
                 is Array<*> -> {
                     if ((it.value as Array<*>).isNotEmpty()) {
                         when ((it.value as Array<*>)[0]) {
-                            is Parcelable -> bundle.putParcelableArray(it.key, it.value as Array<Parcelable>)
-                            is CharSequence -> bundle.putCharSequenceArray(it.key, it.value as Array<CharSequence>)
+                            is Parcelable -> bundle.putParcelableArray(
+                                it.key,
+                                it.value as Array<Parcelable>
+                            )
+                            is CharSequence -> bundle.putCharSequenceArray(
+                                it.key,
+                                it.value as Array<CharSequence>
+                            )
                         }
                     }
                 }
                 is ArrayList<*> -> {
                     if ((it.value as ArrayList<*>).isNotEmpty()) {
                         when ((it.value as ArrayList<*>)[0]) {
-                            is Parcelable -> bundle.putParcelableArrayList(it.key, it.value as ArrayList<Parcelable>)
-                            is CharSequence -> bundle.putCharSequenceArrayList(it.key, it.value as ArrayList<CharSequence>)
-                            is String -> bundle.putStringArrayList(it.key, it.value as ArrayList<String>)
+                            is Parcelable -> bundle.putParcelableArrayList(
+                                it.key,
+                                it.value as ArrayList<Parcelable>
+                            )
+                            is CharSequence -> bundle.putCharSequenceArrayList(
+                                it.key,
+                                it.value as ArrayList<CharSequence>
+                            )
+                            is String -> bundle.putStringArrayList(
+                                it.key,
+                                it.value as ArrayList<String>
+                            )
                             is Int -> bundle.putIntegerArrayList(it.key, it.value as ArrayList<Int>)
                         }
                     }
                 }
-                is SparseArray<*> -> bundle.putSparseParcelableArray(it.key, it.value as SparseArray<Parcelable>)
+                is SparseArray<*> -> bundle.putSparseParcelableArray(
+                    it.key,
+                    it.value as SparseArray<Parcelable>
+                )
                 is ByteArray -> bundle.putByteArray(it.key, it.value as ByteArray)
                 is ShortArray -> bundle.putShortArray(it.key, it.value as ShortArray)
                 is CharArray -> bundle.putCharArray(it.key, it.value as CharArray)
@@ -144,7 +162,8 @@ fun Map<String, Any?>.toBundle(): Bundle {
                 is Bundle -> bundle.putBundle(it.key, it.value as Bundle)
                 //其他对象 序列化成Json
                 else -> {
-                    val serializationService = ARouter.getInstance().navigation(SerializationService::class.java)
+                    val serializationService =
+                        ARouter.getInstance().navigation(SerializationService::class.java)
                     bundle.putString(it.key, serializationService.object2Json(it.value))
                 }
             }

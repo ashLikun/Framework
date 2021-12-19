@@ -159,7 +159,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      * 获取前台Activity
      */
     open fun getActivity(): Activity? = ActivityUtils.getActivity(context)
-        ?: ActivityManager.getForegroundActivity()
+        ?: ActivityManager.foregroundActivity
 
     /**
      * UI发送过来的事件
@@ -167,7 +167,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      * @param what:事件类型
      * @param bundle    事件传递的数据
      */
-    override fun onDispatcherMessage(what: Int, bundle: Bundle?) {}
+    override fun onDispatcherMessage(what: Int, bundle: Bundle) {}
 
     /**
      * 处理fragment发送过来的数据
@@ -175,7 +175,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      * @param what:事件类型
      * @param data      事件传递的数据
      */
-    override fun onDispatcherMessage(what: Int, data: Any?) {}
+    override fun onDispatcherMessage(what: Int, data: Any) {}
 
     /**
      * 提供数据给Fragment

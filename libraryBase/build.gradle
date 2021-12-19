@@ -1,4 +1,9 @@
 apply plugin: 'com.android.library'
+// 使用Kotlin插件
+apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+// GitHub账户名
+group = 'com.github.ashLikun'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -7,8 +12,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        multiDexEnabled = true
     }
+    buildFeatures {
+        buildConfig = false
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -18,21 +27,24 @@ android {
     //java8
     compileOptions {
         //定义生成的META-INF/library_release文件名 More than one file was found with OS independent path 'META-INF/library_release.kotlin_module'
-//        kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core']
+        kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core']
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly rootProject.ext.designVersion
+    compileOnly 'androidx.activity:activity-ktx:1.2.2'
     compileOnly 'com.github.ashLikun.frame:supertoobar:3.1.9'
     compileOnly 'com.github.ashLikun:CommonUtils:+'
     compileOnly 'com.github.ashLikun:LoadSwitch:+'
     compileOnly 'com.github.ashLikun:OkHttpUtils:+'
     compileOnly 'com.alibaba:arouter-api:+'
-    compileOnly 'androidx.databinding:viewbinding:+'
 }
 
 apply from: '../maven.gradle'

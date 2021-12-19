@@ -27,8 +27,8 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
     val viewModel: VM by lazy {
         //获取注解
         var modelClass: Class<VM>? = ViewModelFactoryImp.getViewModelAnnotation(javaClass)
-                ?: ViewModelFactoryImp.getViewModelParameterizedType(javaClass)
-                ?: throw RuntimeException("ViewModel创建失败!检查是否声明了@ViewModel(XXX.class)注解  或者 从写initViewModel方法 或者当前View的泛型没用ViewModel")
+            ?: ViewModelFactoryImp.getViewModelParameterizedType(javaClass)
+            ?: throw RuntimeException("ViewModel创建失败!检查是否声明了@ViewModel(XXX.class)注解  或者 从写initViewModel方法 或者当前View的泛型没用ViewModel")
         //初始化Main的ViewModel
         viewModelProvider[modelClass!!]
     }
@@ -54,7 +54,7 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
         if (isAdded) {
             val intent = Intent()
             if (arguments != null) {
-                intent.putExtras(arguments)
+                intent.putExtras(requireArguments())
             }
             parseIntent(intent)
         }
@@ -75,7 +75,7 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
 
     }
 
-    override fun onDispatcherMessage(what: Int, bundle: Bundle?) {
+    override fun onDispatcherMessage(what: Int, bundle: Bundle) {
         super.onDispatcherMessage(what, bundle)
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
@@ -90,7 +90,7 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
      * @param what:事件类型
      * @param data      事件传递的数据
      */
-    override fun onDispatcherMessage(what: Int, data: Any?) {
+    override fun onDispatcherMessage(what: Int, data: Any) {
         viewModelProvider.forEach<ViewModel> {
             if (it is BaseViewModel) {
                 it.onDispatcherMessage(what, data)
