@@ -61,7 +61,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!isRecycle) {
+        if (!isRecycle()) {
             if (presenter != null) {
                 presenter.onCreate(savedInstanceState);
             }

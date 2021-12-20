@@ -33,7 +33,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     /**
      * 请求CODE
      */
-    var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
+    open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
 
     /**
      * 布局切换
@@ -43,8 +43,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
 
     protected var toolbar: SuperToolBar? = null
     override var switchRoot: View? = null
-    var statusBar: StatusBarCompat? = null
-        protected set
+    open var statusBar: StatusBarCompat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         BugUtils.orientationBug8_0(this)
@@ -74,7 +73,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     /**
      * 设置状态栏
      */
-    protected fun setStatueBar() {
+    protected open fun setStatueBar() {
         if (isStatusBarEnable) {
             statusBar = StatusBarCompat(this)
             //设置状态栏颜色兼容,默认只是颜色
@@ -89,7 +88,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     /**
      * 设置activity的布局，可以重写
      */
-    protected fun setActivityContentView() {
+    protected open fun setActivityContentView() {
         val layoutId = layoutId
         if (layoutId != View.NO_ID) {
             setContentView(layoutId)
@@ -141,12 +140,12 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
             ARouter.getInstance().inject(this)
         } catch (e: Exception) {
         }
-    }//获取主题颜色
+    }
 
     /**
      * 获取状态栏颜色
      */
-    val statusBarColor: Int
+    open val statusBarColor: Int
         get() {
             //获取主题颜色
             val array = theme.obtainStyledAttributes(intArrayOf(R.attr.statusColorCustom))
@@ -158,19 +157,19 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     /**
      * 内容是不是放到状态栏里面
      */
-    val isStatusTranslucent: Boolean
+    open val isStatusTranslucent: Boolean
         get() = false
 
     /**
      * 6.0以下是否绘制半透明,因为不能设置状态栏字体颜色
      */
-    val isStatusTranslucentAndroidMHalf: Boolean
+    open val isStatusTranslucentAndroidMHalf: Boolean
         get() = false
 
     /**
      * 状态栏是否开启沉浸式
      */
-    val isStatusBarEnable: Boolean
+    open val isStatusBarEnable: Boolean
         get() = true
 
 
@@ -250,7 +249,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         return null
     }
 
-    fun getUserVisibleHint(): Boolean {
+    open fun getUserVisibleHint(): Boolean {
         return true
     }
 }

@@ -38,24 +38,24 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     /**
      * 请求CODE
      */
-    var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
+    open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
 
     /**
      * 宿主activity
      */
-    val requireActivity: FragmentActivity
+    open val requireActivity: FragmentActivity
         get() = requireActivity()
 
     /**
      * 宿主Context
      */
-    val requireContext: Context
+    open val requireContext: Context
         get() = requireContext()
 
     /**
      * 布局
      */
-    protected var rootView: View? = null
+    open protected var rootView: View? = null
 
     /**
      * 布局切换
@@ -65,20 +65,15 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     /**
      * 是否是回收利用的Fragment
      */
-    @JvmField
-    protected var isRecycle = false
+    protected open var isRecycle = false
     protected var toolbar: SuperToolBar? = null
     override var switchRoot: View? = null
 
-    val activitySupper: BaseActivity?
+    open val activitySupper: BaseActivity?
         get() = if (activity is BaseActivity) activity as BaseActivity? else null
-    val activityStatusBar: StatusBarCompat?
+    open val activityStatusBar: StatusBarCompat?
         get() = activitySupper?.statusBar
 
-    /**
-     * ViewBinding的Class
-     */
-    protected var viewBindingClass: Class<*>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val intent = Intent()
@@ -107,20 +102,14 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     /**
      * 设置布局，可以重写
      */
-    protected fun setContentView() {
+    open protected fun setContentView() {
         val layoutId: Int = layoutId
         if (layoutId != View.NO_ID) {
             rootView = UiUtils.getInflaterView(requireActivity, layoutId)
         } else {
             rootView = contentView
             if (rootView == null) {
-                //通过反射获取ViewBinding
-                if (viewBindingClass != null) {
-                    rootView = BaseUtils.getViewToViewBindingClass(viewBindingClass, layoutInflater)
-                }
-                if (rootView == null) {
-                    rootView = BaseUtils.getViewBindingView(this)
-                }
+                rootView = binding?.root
             }
         }
     }
@@ -151,7 +140,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
         }
     }
 
-    protected open fun baseInitView() {
+    open protected fun baseInitView() {
         toolbar = f(R.id.toolbar)
         switchRoot = f(R.id.switchRoot)
         initLoadSwitch()
@@ -171,7 +160,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
      *
      * @return false:默认不处理  true:fragment处理
      */
-    fun onBackPressed(): Boolean {
+    open fun onBackPressed(): Boolean {
         return false
     }
 
@@ -220,7 +209,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
      * @param what:事件类型
      * @param bundle    事件传递的数据
      */
-    fun sendMsgToActivity(what: Int, bundle: Bundle = Bundle()) {
+    open fun sendMsgToActivity(what: Int, bundle: Bundle = Bundle()) {
         activitySupper?.onDispatcherMessage(what, bundle)
     }
 
