@@ -1,12 +1,10 @@
 package com.ashlikun.core.mvvm
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.ashlikun.core.fragment.BaseFragment
-import com.ashlikun.loadswitch.LoadSwitchService
 
 
 /**

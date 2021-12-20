@@ -49,9 +49,9 @@ android {
 }
 
 dependencies {
-
+    //kotlin 协程
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation rootProject.ext.designVersion
     //viewmodel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
@@ -76,10 +76,10 @@ dependencies {
     implementation 'com.github.ashLikun:LoadSwitch:+'
     //Okhttp工具
     implementation 'com.github.ashLikun:OkHttpUtils:+'
-    implementation 'com.squareup.okhttp3:okhttp:3.+'
+    implementation 'com.squareup.okhttp3:okhttp:4.3.9'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.ashLikun:MultiTypeGson:2.0.1'
-    implementation 'com.github.ashLikun:LiteOrm:2.0.1'
+    implementation 'com.github.ashLikun:LiteOrm:2.0.2'
     implementation('com.alibaba:arouter-api:+') {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"

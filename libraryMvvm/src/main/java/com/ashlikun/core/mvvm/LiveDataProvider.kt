@@ -3,7 +3,6 @@ package com.ashlikun.core.mvvm
 import androidx.lifecycle.MutableLiveData
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
-import kotlin.reflect.KClassifier
 
 /**
  * 作者　　: 李坤

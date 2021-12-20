@@ -2,11 +2,9 @@ package com.ashlikun.core.mvvm
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ashlikun.utils.other.LogUtils
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 

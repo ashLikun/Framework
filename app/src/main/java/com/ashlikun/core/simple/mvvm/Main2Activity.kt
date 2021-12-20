@@ -11,8 +11,6 @@ import com.ashlikun.core.mvvm.launch
 import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.utils.other.LogUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
-import java.lang.NullPointerException
-import kotlin.math.log
 
 @IViewModel(MainViewModel::class)
 class Main2Activity : BaseMvvmActivity<MainViewModel>() {

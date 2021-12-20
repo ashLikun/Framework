@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
-import android.view.View
-import com.ashlikun.core.simple.R
 import com.ashlikun.core.activity.BaseMvpActivity
-import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.core.simple.databinding.ActivityMainMvpBinding
 
 class MainActivity : BaseMvpActivity<MainPresenter>(), IMainView {
