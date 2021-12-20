@@ -30,7 +30,8 @@ class LiveDataProvider {
      */
     @Deprecated("使用kclass")
     open operator fun <T> get(key: String?, clazz: Class<T>): MutableLiveData<T> {
-        var keyName: String = key ?: clazz.canonicalName
+        var keyName: String =
+            key ?: clazz.canonicalName ?: throw RuntimeException("livedata no key")
         var mutableLiveData: MutableLiveData<T>? = maps[keyName] as MutableLiveData<T>?
         //1.判断集合是否已经存在livedata对象
         if (mutableLiveData != null) {

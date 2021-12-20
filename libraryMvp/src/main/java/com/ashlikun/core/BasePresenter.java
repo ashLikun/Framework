@@ -82,7 +82,7 @@ public abstract class BasePresenter<T extends IBaseView> implements LifecycleObs
         if (mvpView != null && mvpView.get() != null) {
             if (mvpView.get() instanceof Activity) {
                 return (Activity) mvpView.get();
-            } else if ((activity = ActivityUtils.getActivity(mvpView.get().getContext())) != null) {
+            } else if ((activity = ActivityUtils.INSTANCE.getActivity(mvpView.get().getContext())) != null) {
                 return activity;
             } else if (mvpView.get() instanceof Fragment) {
                 return ((Fragment) mvpView.get()).getActivity();
