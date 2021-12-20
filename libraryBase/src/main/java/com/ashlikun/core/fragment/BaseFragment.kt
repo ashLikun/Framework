@@ -35,44 +35,45 @@ import com.ashlikun.utils.ui.status.StatusBarCompat
  * @see OnDispatcherMessage : Fragment处理其他
  */
 abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
-    /**
-     * 请求CODE
-     */
+    //请求CODE
     open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
 
-    /**
-     * 宿主activity
-     */
+    //宿主activity
     open val requireActivity: FragmentActivity
         get() = requireActivity()
 
-    /**
-     * 宿主Context
-     */
+    //宿主Context
     open val requireContext: Context
         get() = requireContext()
 
-    /**
-     * 布局
-     */
+    //布局
     open protected var rootView: View? = null
 
-    /**
-     * 布局切换
-     */
-    override var switchService: LoadSwitchService? = null
+    //是否是回收利用的Fragment
+    open protected var isRecycle = false
 
-    /**
-     * 是否是回收利用的Fragment
-     */
-    protected open var isRecycle = false
-    protected var toolbar: SuperToolBar? = null
-    override var switchRoot: View? = null
+    //toolbar
+    open val toolbar: SuperToolBar?
+        get() = f(R.id.toolbar)
 
+
+    //BaseActivity
     open val activitySupper: BaseActivity?
-        get() = if (activity is BaseActivity) activity as BaseActivity? else null
+        get() = if (activity is BaseActivity) activity as BaseActivity else null
+
+    //状态栏
     open val activityStatusBar: StatusBarCompat?
         get() = activitySupper?.statusBar
+
+    //布局切换的根布局
+    override val switchRoot: View?
+        get() = f(R.id.switchRoot)
+
+    //布局切换
+    override val switchService: LoadSwitchService? by lazy {
+        if (switchRoot == null) null else LoadSwitch.get()
+            .register(switchRoot, BaseUtils.getSwitchLayoutListener(requireContext, this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,8 +117,8 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
 
     override fun initLoadSwitch() {
         if (switchRoot != null) {
-            switchService = LoadSwitch.get()
-                .register(switchRoot!!, BaseUtils.getSwitchLayoutListener(requireContext, this))
+            //这里得初始化
+            switchService
         }
     }
 
@@ -141,8 +142,6 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     }
 
     open protected fun baseInitView() {
-        toolbar = f(R.id.toolbar)
-        switchRoot = f(R.id.switchRoot)
         initLoadSwitch()
     }
 

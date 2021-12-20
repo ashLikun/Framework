@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.ashlikun.core.activity.BaseActivity
+import com.ashlikun.loadswitch.LoadSwitchService
 
 
 /**

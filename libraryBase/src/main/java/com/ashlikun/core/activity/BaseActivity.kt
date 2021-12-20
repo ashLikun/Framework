@@ -30,20 +30,27 @@ import com.ashlikun.utils.ui.status.StatusBarCompat
  */
 
 abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMessage {
-    /**
-     * 请求CODE
-     */
+    //请求CODE
     open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
 
-    /**
-     * 布局切换
-     */
-    override var switchService: LoadSwitchService? = null
+    //toolbar
+    open val toolbar: SuperToolBar?
+        get() = f(R.id.toolbar)
 
+    //状态栏
+    open val statusBar: StatusBarCompat? by lazy {
+        StatusBarCompat(this)
+    }
 
-    protected var toolbar: SuperToolBar? = null
-    override var switchRoot: View? = null
-    open var statusBar: StatusBarCompat? = null
+    //布局切换的根布局
+    override val switchRoot: View?
+        get() = f(R.id.switchRoot)
+
+    //布局切换
+    override val switchService: LoadSwitchService? by lazy {
+        if (switchRoot == null) null else LoadSwitch.get()
+            .register(switchRoot, getSwitchLayoutListener(this, this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         BugUtils.orientationBug8_0(this)
@@ -75,12 +82,11 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      */
     protected open fun setStatueBar() {
         if (isStatusBarEnable) {
-            statusBar = StatusBarCompat(this)
             //设置状态栏颜色兼容,默认只是颜色
             if (isStatusTranslucent || isStatusTranslucentAndroidMHalf) {
-                statusBar!!.translucentStatusBar(isStatusTranslucentAndroidMHalf)
+                statusBar?.translucentStatusBar(isStatusTranslucentAndroidMHalf)
             } else {
-                statusBar!!.setStatusBarColor(statusBarColor)
+                statusBar?.setStatusBarColor(statusBarColor)
             }
         }
     }
@@ -107,8 +113,6 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      * 基本的View初始化
      */
     protected open fun baseInitView() {
-        toolbar = f(R.id.toolbar)
-        switchRoot = f(R.id.switchRoot)
         initLoadSwitch()
     }
 
@@ -122,8 +126,8 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     override fun initLoadSwitch() {
         val view = switchRoot
         if (view != null) {
-            switchService = LoadSwitch.get()
-                .register(view, getSwitchLayoutListener(this, this))
+            //这里得初始化
+            switchService
         }
     }
 

@@ -7,6 +7,9 @@ import android.os.Bundle;
 import com.ashlikun.core.BasePresenter;
 import com.ashlikun.core.factory.PresenterFactoryImp;
 import com.ashlikun.core.iview.IBaseView;
+import com.ashlikun.loadswitch.LoadSwitchService;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -25,6 +28,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter>
     public Context getContext() {
         return this;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
