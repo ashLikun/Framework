@@ -4,9 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import com.ashlikun.core.mvvm.BaseMvvmFragment
 import com.ashlikun.core.simple.R
+import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.utils.other.LogUtils
 
 class Main2Fragment : BaseMvvmFragment<MainViewModel2>() {
+    override val layoutId = R.layout.activity_main
+    override val binding = ActivityMainBinding.inflate(layoutInflater)
     override fun onCreate(savedInstanceState: Bundle?) {
         LogUtils.e("onCreate")
         super.onCreate(savedInstanceState)
@@ -15,12 +18,6 @@ class Main2Fragment : BaseMvvmFragment<MainViewModel2>() {
     override fun initViewModel() {
         super.initViewModel()
         LogUtils.e("initViewModel")
-    }
-
-    override fun getLayoutId(): Int {
-        LogUtils.e("getLayoutId")
-        return R.layout.activity_main
-
     }
 
     override fun initView() {

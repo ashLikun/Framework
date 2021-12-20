@@ -1,9 +1,8 @@
-package com.ashlikun.core.simple
+package com.ashlikun.core.simple.mvp
 
 import android.os.Bundle
-
 import com.ashlikun.core.BasePresenter
-import com.ashlikun.utils.other.LogUtils
+import com.ashlikun.utils.other.LogUtils.e
 
 /**
  * 作者　　: 李坤
@@ -13,36 +12,34 @@ import com.ashlikun.utils.other.LogUtils
  *
  * 功能介绍：
  */
-class MainPresenter : BasePresenter<IMainView>() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainFragmentPresenter : BasePresenter<IMainView>() {
+    override fun onCreate(savedInstanceState: Bundle) {
         super.onCreate(savedInstanceState)
-        val aaa = view.findSize()
-        LogUtils.e("onCreate")
+        e("onCreate")
     }
 
     override fun onAttachView(mvpView: IMainView) {
         super.onAttachView(mvpView)
-        LogUtils.e("onAttachView")
+        e("onAttachView")
     }
 
     override fun onStart() {
         super.onStart()
-        LogUtils.e("onStart")
+        e("onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        LogUtils.e("onResume")
+        e("onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        LogUtils.e("onPause")
+        e("onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        LogUtils.e("onStop")
+        e("onStop")
     }
 }

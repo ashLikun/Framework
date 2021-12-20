@@ -14,12 +14,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 
 @IViewModel(MainViewModel::class)
 class Main2Activity : BaseMvvmActivity<MainViewModel>() {
-    val viewBinding by lazy {
-        val aaa = System.currentTimeMillis()
-        val aa = ActivityMainBinding.inflate(layoutInflater)
-        Log.e("addssssssssss", (System.currentTimeMillis() - aaa).toString())
-        aa
-    }
+    override val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun initViewModel() {
         super.initViewModel()

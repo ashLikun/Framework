@@ -131,4 +131,5 @@ public abstract class BaseMvpActivity<P extends BasePresenter>
         }
         return null;
     }
+
 }

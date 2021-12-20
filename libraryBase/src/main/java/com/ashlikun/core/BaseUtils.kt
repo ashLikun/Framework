@@ -10,7 +10,6 @@ import com.ashlikun.loadswitch.DefaultOnLoadLayoutListener
 import com.ashlikun.loadswitch.OnLoadLayoutListener
 import com.ashlikun.loadswitch.OnLoadSwitchClick
 import java.lang.reflect.*
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 /**

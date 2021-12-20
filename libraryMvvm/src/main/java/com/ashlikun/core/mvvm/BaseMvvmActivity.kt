@@ -25,8 +25,8 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
     val viewModel: VM by lazy {
         //获取注解
         var modelClass: Class<VM>? = ViewModelFactoryImp.getViewModelAnnotation(javaClass)
-                ?: ViewModelFactoryImp.getViewModelParameterizedType(javaClass)
-                ?: throw RuntimeException("ViewModel创建失败!检查是否声明了@ViewModel(XXX.class)注解  或者 从写initViewModel方法 或者当前View的泛型没用ViewModel")
+            ?: ViewModelFactoryImp.getViewModelParameterizedType(javaClass)
+            ?: throw RuntimeException("ViewModel创建失败!检查是否声明了@ViewModel(XXX.class)注解  或者 从写initViewModel方法 或者当前View的泛型没用ViewModel")
         //初始化Main的ViewModel
         viewModelProvider[modelClass!!]
     }

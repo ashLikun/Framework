@@ -1,10 +1,11 @@
 package com.ashlikun.core.listener
 
-import com.ashlikun.loadswitch.OnLoadSwitchClick
 import android.view.View
 import androidx.annotation.IdRes
-import com.ashlikun.loadswitch.LoadSwitchService
+import androidx.viewbinding.ViewBinding
 import com.ashlikun.loadswitch.ContextData
+import com.ashlikun.loadswitch.LoadSwitchService
+import com.ashlikun.loadswitch.OnLoadSwitchClick
 
 /**
  * @author　　: 李坤
@@ -20,6 +21,13 @@ interface IBaseWindow : OnLoadSwitchClick {
      */
     val layoutId: Int
         get() = View.NO_ID
+
+    /**
+     * 获取布局id
+     * 优先使用
+     */
+    val binding: ViewBinding?
+        get() = null
 
     /**
      * 获取布局view

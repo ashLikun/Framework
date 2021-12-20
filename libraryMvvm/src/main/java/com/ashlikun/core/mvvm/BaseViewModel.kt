@@ -198,36 +198,37 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
      * 销毁网络访问
      */
     open fun cancelAllHttp() {
-        OkHttpUtils.getInstance().cancelTag(this)
+        OkHttpUtils.get().cancelTag(this)
     }
 
     /**
      * 通过指定的数据实体类获取对应的MutableLiveData类
      */
     @Deprecated("使用kclass")
-    open operator fun <T> get(clazz: Class<T>): MutableLiveData<T> = lifeDataProvider[clazz]
+    inline operator fun <T> get(clazz: Class<T>): MutableLiveData<T> = lifeDataProvider[clazz]
 
     /**
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
     @Deprecated("使用kclass")
-    open operator fun <T> get(key: String?, clazz: Class<T>) = lifeDataProvider[key, clazz]
+    inline operator fun <T> get(key: String?, clazz: Class<T>) = lifeDataProvider[key, clazz]
 
     /**
      * 通过指定的数据实体类获取对应的MutableLiveData类
      */
-    open operator fun <T : Any> get(clazz: KClass<T>): MutableLiveData<T> = lifeDataProvider[clazz]
+    inline operator fun <T : Any> get(clazz: KClass<T>): MutableLiveData<T> =
+        lifeDataProvider[clazz]
 
     /**
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
-    open operator fun <T : Any> get(key: String?, clazz: KClass<T>) = lifeDataProvider[key, clazz]
+    inline operator fun <T : Any> get(key: String?, clazz: KClass<T>) = lifeDataProvider[key, clazz]
 
     /**
      * 简化版
      * 通过指定的key或者数据实体类获取对应的MutableLiveData类
      */
-    inline fun <reified T : Any> get(key: String? = null): MutableLiveData<T> =
+    inline operator fun <reified T : Any> get(key: String? = null): MutableLiveData<T> =
         lifeDataProvider[key, T::class]
 
 }

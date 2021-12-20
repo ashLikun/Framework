@@ -7,8 +7,6 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.BaseUtils.getSwitchLayoutListener
-import com.ashlikun.core.BaseUtils.getViewBindingView
-import com.ashlikun.core.BaseUtils.getViewToViewBindingClass
 import com.ashlikun.core.R
 import com.ashlikun.core.listener.IBaseWindow
 import com.ashlikun.core.listener.OnDispatcherMessage
@@ -22,15 +20,15 @@ import com.ashlikun.utils.ui.status.StatusBarCompat
 
 /**
  * @author　　: 李坤
- * 创建时间: 2018/8/8 15:56
+ * 创建时间: 2021.12.20 15:56
  * 邮箱　　：496546144@qq.com
- *
  *
  * 功能介绍：自定义最顶层的Activity
  * @see IBaseWindow : 只要是窗口都会实现这个统一接口
  *
  * @see OnDispatcherMessage : Activity处理其他
  */
+
 abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMessage {
     /**
      * 请求CODE
@@ -48,11 +46,6 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     var statusBar: StatusBarCompat? = null
         protected set
 
-
-    /**
-     * ViewBinding的Class
-     */
-    protected var viewBindingClass: Class<*>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         BugUtils.orientationBug8_0(this)
         super.onCreate(savedInstanceState)
@@ -105,13 +98,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
             if (view != null) {
                 setContentView(view)
             } else {
-                //通过反射获取ViewBinding
-                if (viewBindingClass != null) {
-                    view = getViewToViewBindingClass(viewBindingClass, layoutInflater)
-                }
-                if (view == null) {
-                    view = getViewBindingView(this)
-                }
+                view = binding?.root
                 view?.let { setContentView(it) }
             }
         }
@@ -234,7 +221,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      * 销毁网络访问
      */
     override fun cancelAllHttp() {
-        OkHttpUtils.getInstance().cancelTag(this)
+        OkHttpUtils.get().cancelTag(this)
     }
 
     /**
@@ -263,6 +250,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         return null
     }
 
-    val userVisibleHint: Boolean
-        get() = true
+    fun getUserVisibleHint(): Boolean {
+        return true
+    }
 }

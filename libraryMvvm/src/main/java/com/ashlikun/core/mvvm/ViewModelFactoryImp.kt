@@ -17,8 +17,8 @@ import kotlin.reflect.KClass
  * @param mvvmBaseInterface 一般是[BaseMvvmActivity]或者[BaseMvvmFragment]
  */
 
-open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
-    : ViewModelProvider.NewInstanceFactory() {
+open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null) :
+    ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val model = super.create(modelClass)
@@ -85,14 +85,15 @@ open class ViewModelFactoryImp(var mvvmBaseInterface: MvvmBaseInterface? = null)
          * 获取ViewModel注解
          */
         fun <VM : BaseViewModel> getViewModelAnnotation(viewClazz: Class<*>) =
-                (viewClazz.getAnnotation(IViewModel::class.java)?.value as KClass<VM>?)?.java
+            (viewClazz.getAnnotation(IViewModel::class.java)?.value as KClass<VM>?)?.java
 
         /**
          * 获取父类的泛型BaseViewModel
          */
         fun <VM : BaseViewModel> getViewModelParameterizedType(viewClazz: Class<*>): Class<VM>? {
             if (viewClazz.genericSuperclass is ParameterizedType && (viewClazz.genericSuperclass as ParameterizedType).actualTypeArguments.isNotEmpty()) {
-                val modelClass2 = (viewClazz.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+                val modelClass2 =
+                    (viewClazz.genericSuperclass as ParameterizedType).actualTypeArguments[0]
                 if (modelClass2 is Class<*>?) {
                     return modelClass2 as Class<VM>?
                 }

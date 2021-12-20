@@ -1,6 +1,5 @@
 package com.ashlikun.core.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.BaseUtils
+import com.ashlikun.core.R
 import com.ashlikun.core.activity.BaseActivity
 import com.ashlikun.core.listener.IBaseWindow
 import com.ashlikun.core.listener.OnDispatcherMessage
@@ -22,7 +22,6 @@ import com.ashlikun.okhttputils.http.OkHttpUtils
 import com.ashlikun.supertoobar.SuperToolBar
 import com.ashlikun.utils.ui.UiUtils
 import com.ashlikun.utils.ui.status.StatusBarCompat
-import com.ashlikun.core.R
 
 /**
  * @author　　: 李坤
@@ -46,6 +45,10 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
      */
     val requireActivity: FragmentActivity
         get() = requireActivity()
+
+    /**
+     * 宿主Context
+     */
     val requireContext: Context
         get() = requireContext()
 
@@ -208,7 +211,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
      * 销毁网络访问
      */
     override fun cancelAllHttp() {
-        OkHttpUtils.getInstance().cancelTag(this)
+        OkHttpUtils.get().cancelTag(this)
     }
 
     /**

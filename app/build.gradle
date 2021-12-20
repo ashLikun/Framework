@@ -26,6 +26,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
     applicationVariants.all { variant ->
         variant.outputs.all {
             if (variant.buildType.isDebuggable()) {
@@ -43,9 +46,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    viewBinding {
-        enabled = true
-    }
+
 }
 
 dependencies {
@@ -53,6 +54,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation rootProject.ext.designVersion
+    implementation "androidx.annotation:annotation:1.3.0"
     //viewmodel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
@@ -76,7 +78,7 @@ dependencies {
     implementation 'com.github.ashLikun:LoadSwitch:+'
     //Okhttp工具
     implementation 'com.github.ashLikun:OkHttpUtils:+'
-    implementation 'com.squareup.okhttp3:okhttp:4.3.9'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.ashLikun:MultiTypeGson:2.0.1'
     implementation 'com.github.ashLikun:LiteOrm:2.0.2'

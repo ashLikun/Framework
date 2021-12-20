@@ -12,7 +12,8 @@ import androidx.lifecycle.ViewModelStoreOwner
  *
  * 功能介绍：自己实现ViewModelProvider
  */
-open class XViewModelProvider(store: ViewModelStore, var factory: Factory) : ViewModelProvider(store, factory) {
+open class XViewModelProvider(store: ViewModelStore, var factory: Factory) :
+    ViewModelProvider(store, factory) {
     private val keys = HashMap<String, Class<*>>()
 
     constructor(owner: ViewModelStoreOwner, factory: Factory) : this(owner.viewModelStore, factory)

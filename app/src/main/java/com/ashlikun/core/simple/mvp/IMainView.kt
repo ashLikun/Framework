@@ -1,4 +1,4 @@
-package com.ashlikun.core.simple
+package com.ashlikun.core.simple.mvp
 
 import com.ashlikun.core.iview.IBaseView
 
@@ -13,5 +13,4 @@ import com.ashlikun.core.iview.IBaseView
 
 interface IMainView : IBaseView {
     fun findSize(): Int
-
 }

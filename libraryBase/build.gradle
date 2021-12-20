@@ -27,7 +27,7 @@ android {
     //java8
     compileOptions {
         //定义生成的META-INF/library_release文件名 More than one file was found with OS independent path 'META-INF/library_release.kotlin_module'
-        kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core']
+//        kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core']
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -39,6 +39,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly rootProject.ext.designVersion
+    implementation "androidx.annotation:annotation:1.3.0"
     compileOnly 'androidx.activity:activity-ktx:1.2.2'
     compileOnly 'com.github.ashLikun.frame:supertoobar:3.1.9'
     compileOnly 'com.github.ashLikun:CommonUtils:+'

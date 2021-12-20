@@ -13,10 +13,8 @@ import com.ashlikun.utils.other.LogUtils
  * 功能介绍：
  */
 class MainViewModel : BaseViewModel() {
-    val mainData: MutableLiveData<List<String>> by lazy {
-        get()
-    }
-    val mainData2 = get(List::class.java)
+    val mainData: MutableLiveData<List<String>> = get()
+    val mainData2 = get(List::class)
     override fun onCreate() {
         LogUtils.e("ViewModel onCreate ${System.identityHashCode(this)}")
         super.onCreate()

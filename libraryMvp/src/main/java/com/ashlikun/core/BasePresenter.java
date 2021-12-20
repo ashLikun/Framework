@@ -159,7 +159,7 @@ public abstract class BasePresenter<T extends IBaseView> implements LifecycleObs
      * 销毁网络访问
      */
     public void cancelAllHttp() {
-        OkHttpUtils.getInstance().cancelTag(this);
+        OkHttpUtils.Companion.get().cancelTag(this);
     }
 
     /**
