@@ -38,6 +38,29 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //请求CODE
     open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
 
+    //toolbar
+    open val toolbar: SuperToolBar? by lazy {
+        f(R.id.toolbar)
+    }
+
+    //根布局
+    open protected var rootView: View? = null
+
+    //是否是回收利用的Fragment
+    open protected var isRecycle = false
+
+
+    //布局切换的根布局
+    override val switchRoot: View? by lazy {
+        f(R.id.switchRoot)
+    }
+
+    //布局切换
+    override val switchService: LoadSwitchService? by lazy {
+        if (switchRoot == null) null else LoadSwitch.get()
+            .register(switchRoot, BaseUtils.getSwitchLayoutListener(requireContext, this))
+    }
+
     //宿主activity
     open val requireActivity: FragmentActivity
         get() = requireActivity()
@@ -46,17 +69,6 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     open val requireContext: Context
         get() = requireContext()
 
-    //布局
-    open protected var rootView: View? = null
-
-    //是否是回收利用的Fragment
-    open protected var isRecycle = false
-
-    //toolbar
-    open val toolbar: SuperToolBar?
-        get() = f(R.id.toolbar)
-
-
     //BaseActivity
     open val activitySupper: BaseActivity?
         get() = if (activity is BaseActivity) activity as BaseActivity else null
@@ -64,16 +76,6 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //状态栏
     open val activityStatusBar: StatusBarCompat?
         get() = activitySupper?.statusBar
-
-    //布局切换的根布局
-    override val switchRoot: View?
-        get() = f(R.id.switchRoot)
-
-    //布局切换
-    override val switchService: LoadSwitchService? by lazy {
-        if (switchRoot == null) null else LoadSwitch.get()
-            .register(switchRoot, BaseUtils.getSwitchLayoutListener(requireContext, this))
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +94,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
             setContentView()
         } else {
             isRecycle = true
-            val parent: ViewGroup = rootView!!.getParent() as ViewGroup
+            val parent: ViewGroup = rootView!!.parent as ViewGroup
             if (parent != null) {
                 parent.removeView(rootView)
             }

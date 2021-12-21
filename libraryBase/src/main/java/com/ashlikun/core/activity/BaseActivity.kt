@@ -34,17 +34,14 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
 
     //toolbar
-    open val toolbar: SuperToolBar?
-        get() = f(R.id.toolbar)
+    open val toolbar: SuperToolBar? by lazy {
+        f(R.id.toolbar)
+    }
 
     //状态栏
     open val statusBar: StatusBarCompat? by lazy {
         StatusBarCompat(this)
     }
-
-    //布局切换的根布局
-    override val switchRoot: View?
-        get() = f(R.id.switchRoot)
 
     //布局切换
     override val switchService: LoadSwitchService? by lazy {
