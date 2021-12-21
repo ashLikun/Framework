@@ -43,6 +43,11 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         StatusBarCompat(this)
     }
 
+    //布局切换的根布局
+    override val switchRoot: View? by lazy {
+        f(R.id.switchRoot)
+    }
+
     //布局切换
     override val switchService: LoadSwitchService? by lazy {
         if (switchRoot == null) null else LoadSwitch.get()

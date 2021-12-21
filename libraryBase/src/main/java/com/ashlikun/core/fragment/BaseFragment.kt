@@ -46,9 +46,6 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //根布局
     open protected var rootView: View? = null
 
-    //是否是回收利用的Fragment
-    open protected var isRecycle = false
-
 
     //布局切换的根布局
     override val switchRoot: View? by lazy {
@@ -60,6 +57,9 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
         if (switchRoot == null) null else LoadSwitch.get()
             .register(switchRoot, BaseUtils.getSwitchLayoutListener(requireContext, this))
     }
+
+    //是否是回收利用的Fragment
+    open protected var isRecycle = false
 
     //宿主activity
     open val requireActivity: FragmentActivity
