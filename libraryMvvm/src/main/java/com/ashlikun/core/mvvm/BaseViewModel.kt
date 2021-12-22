@@ -21,7 +21,8 @@ import kotlin.reflect.KClass
  * 功能介绍：VM 的基础,自动感知生命周期
  */
 
-open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcherMessage {
+open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
+    SimpleLifecycleObserver {
     //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常
     //标记是否与宿主断开，就是宿主是否销毁（准备开始重建）
     internal var isDestroy = false
@@ -109,31 +110,7 @@ open abstract class BaseViewModel : ViewModel(), LifecycleObserver, OnDispatcher
         showRetry.value = contextData
     }
 
-    /**
-     * 创建的时候,一般用于主动获取数据
-     */
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    open fun onCreate() {
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    open fun onStart() {
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    open fun onResume() {
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    open fun onPause() {
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    open fun onStop() {
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    open fun onDestroy() {
+    override fun onDestroy() {
         //防止内存泄漏
         lifecycleOwner = null
         context = null
