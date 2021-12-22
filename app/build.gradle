@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 //kapt插件
 apply plugin: 'kotlin-kapt'
 
+
 android {
     compileSdk rootProject.ext.compileSdk
 //    buildToolsVersion rootProject.ext.buildToolsVersion
