@@ -1,9 +1,8 @@
-apply plugin: 'com.android.application'
-// 使用Kotlin插件
-apply plugin: 'kotlin-android'
-//kapt插件
-apply plugin: 'kotlin-kapt'
-
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 android {
     compileSdk rootProject.ext.compileSdk
