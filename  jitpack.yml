@@ -2,5 +2,6 @@ jdk:
   - openjdk11
 
 install:
-  - ./gradlew :BottomNavigationBar:build :BottomNavigationBar:publishToMavenLocal
+  - ./gradlew :libraryBase:build :libraryBase:publishToMavenLocal
+  - ./gradlew :libraryMvvm:build :libraryMvvm:publishToMavenLocal
   - find . -name "*.aar"
