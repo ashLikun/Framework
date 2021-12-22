@@ -17,7 +17,6 @@ android {
         buildConfig = false
         viewBinding = true
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -27,9 +26,9 @@ android {
     //java8
     compileOptions {
         //定义生成的META-INF/library_release文件名 More than one file was found with OS independent path 'META-INF/library_release.kotlin_module'
-//        kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core']
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        kotlinOptions.freeCompilerArgs += ['-module-name', 'com.ashlikun.core.base']
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
     kotlinOptions {
         jvmTarget = "1.8"
