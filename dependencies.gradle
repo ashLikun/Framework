@@ -1,4 +1,4 @@
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 // GitHub账户名
 group = 'com.github.ashLikun'
 
