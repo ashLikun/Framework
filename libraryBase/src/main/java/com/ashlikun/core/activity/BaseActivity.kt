@@ -206,6 +206,8 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         switchService?.showLoading(data)
     }
 
+
+
     override fun showContent() {
         switchService?.showContent()
     }

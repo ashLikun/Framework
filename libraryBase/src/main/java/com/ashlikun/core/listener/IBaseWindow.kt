@@ -71,7 +71,7 @@ interface IBaseWindow : OnLoadSwitchClick {
      *
      * @param data
      */
-    fun showLoading(data: ContextData)
+    fun showLoading(data: ContextData = ContextData())
 
     /**
      * 初始化布局切换的管理器
@@ -83,7 +83,7 @@ interface IBaseWindow : OnLoadSwitchClick {
      *
      * @param data
      */
-    fun showRetry(data: ContextData)
+    fun showRetry(data: ContextData = ContextData())
 
     /**
      * 显示内容页面
@@ -95,7 +95,7 @@ interface IBaseWindow : OnLoadSwitchClick {
      *
      * @param data
      */
-    fun showEmpty(data: ContextData)
+    fun showEmpty(data: ContextData = ContextData())
 
     /**
      * 销毁页面
