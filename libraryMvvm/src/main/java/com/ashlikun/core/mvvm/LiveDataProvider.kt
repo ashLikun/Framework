@@ -11,6 +11,7 @@ import kotlin.reflect.KClass
  *
  * 功能介绍：LiveData创建
  */
+@Deprecated("直接创建")
 class LiveDataProvider {
     private val maps: ConcurrentHashMap<String, MutableLiveData<*>> by lazy {
         //初始化集合(线程安全)
@@ -65,4 +66,5 @@ class LiveDataProvider {
         maps[keyName] = mutableLiveData
         return mutableLiveData
     }
+
 }

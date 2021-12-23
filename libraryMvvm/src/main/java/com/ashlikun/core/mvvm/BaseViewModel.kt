@@ -43,10 +43,6 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     var isCleared = false
         private set
 
-    //LiveData创建
-    val lifeDataProvider: LiveDataProvider by lazy {
-        LiveDataProvider()
-    }
 
     //数据是否初始化过
     var dataInit = false
@@ -179,33 +175,8 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     }
 
     /**
-     * 通过指定的数据实体类获取对应的MutableLiveData类
+     * 创建MutableLiveData类
      */
-    @Deprecated("使用kclass")
-    inline operator fun <T> get(clazz: Class<T>): MutableLiveData<T> = lifeDataProvider[clazz]
-
-    /**
-     * 通过指定的key或者数据实体类获取对应的MutableLiveData类
-     */
-    @Deprecated("使用kclass")
-    inline operator fun <T> get(key: String?, clazz: Class<T>) = lifeDataProvider[key, clazz]
-
-    /**
-     * 通过指定的数据实体类获取对应的MutableLiveData类
-     */
-    inline operator fun <T : Any> get(clazz: KClass<T>): MutableLiveData<T> =
-        lifeDataProvider[clazz]
-
-    /**
-     * 通过指定的key或者数据实体类获取对应的MutableLiveData类
-     */
-    inline operator fun <T : Any> get(key: String?, clazz: KClass<T>) = lifeDataProvider[key, clazz]
-
-    /**
-     * 简化版
-     * 通过指定的key或者数据实体类获取对应的MutableLiveData类
-     */
-    inline operator fun <reified T : Any> get(key: String? = null): MutableLiveData<T> =
-        lifeDataProvider[key, T::class]
+    inline fun <reified T : Any> get() = MutableLiveData<T>()
 
 }

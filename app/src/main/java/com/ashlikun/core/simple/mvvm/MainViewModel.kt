@@ -2,6 +2,7 @@ package com.ashlikun.core.simple.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import com.ashlikun.core.mvvm.BaseViewModel
+import com.ashlikun.core.simple.Data
 import com.ashlikun.utils.other.LogUtils
 
 /**
@@ -13,9 +14,10 @@ import com.ashlikun.utils.other.LogUtils
  * 功能介绍：
  */
 class MainViewModel : BaseViewModel() {
-    val mainData: MutableLiveData<List<String>> = get()
-    val mainData2 = get(List::class)
+    val mainData = get<Data>()
+    val mainData2 = get<List<String>>()
     override fun onCreate() {
+//        mainData.value = mutableListOf("dddddddddd")
         LogUtils.e("ViewModel onCreate ${System.identityHashCode(this)}")
         super.onCreate()
     }
