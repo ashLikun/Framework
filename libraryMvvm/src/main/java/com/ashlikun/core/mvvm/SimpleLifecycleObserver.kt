@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleOwner
  *
  * 功能介绍：简化DefaultLifecycleObserver
  */
-interface SimpleLifecycleObserver : DefaultLifecycle{
+interface SimpleLifecycleObserver : DefaultLifecycleObserver {
     override fun onCreate(owner: LifecycleOwner) {
         onCreate()
     }
