@@ -69,6 +69,10 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     open val requireContext: Context
         get() = requireContext()
 
+    //处理arguments 为null的请情况
+    open val requireArguments: Bundle
+        get() = arguments ?: Bundle()
+
     //BaseActivity
     open val activitySupper: BaseActivity?
         get() = if (activity is BaseActivity) activity as BaseActivity else null
@@ -76,6 +80,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //状态栏
     open val activityStatusBar: StatusBarCompat?
         get() = activitySupper?.statusBar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
