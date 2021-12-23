@@ -14,7 +14,7 @@ import com.ashlikun.utils.other.LogUtils
  * 功能介绍：
  */
 class MainViewModel : BaseViewModel() {
-    val mainData = get<Data>()
+    val mainData = get<Data?>()
     val mainData2 = get<List<String>>()
     override fun onCreate() {
 //        mainData.value = mutableListOf("dddddddddd")

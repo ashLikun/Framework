@@ -177,6 +177,6 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     /**
      * 创建MutableLiveData类
      */
-    inline fun <reified T : Any> get() = MutableLiveData<T>()
+    inline fun <reified T : Any?> get() = MutableLiveData<T>()
 
 }
