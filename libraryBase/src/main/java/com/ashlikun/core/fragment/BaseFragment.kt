@@ -71,7 +71,10 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
 
     //处理arguments 为null的请情况
     open val requireArguments: Bundle
-        get() = arguments ?: Bundle()
+        get() {
+            if (arguments == null) arguments = Bundle()
+            return arguments!!
+        }
 
     //BaseActivity
     open val activitySupper: BaseActivity?
@@ -80,7 +83,6 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //状态栏
     open val activityStatusBar: StatusBarCompat?
         get() = activitySupper?.statusBar
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
