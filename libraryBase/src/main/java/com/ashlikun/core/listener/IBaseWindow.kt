@@ -1,6 +1,8 @@
 package com.ashlikun.core.listener
 
+import android.content.Intent
 import android.view.View
+import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.viewbinding.ViewBinding
 import com.ashlikun.loadswitch.ContextData
@@ -15,6 +17,8 @@ import com.ashlikun.loadswitch.OnLoadSwitchClick
  * 功能介绍：一个窗口要实现的接口
  */
 interface IBaseWindow : OnLoadSwitchClick {
+
+
     /**
      * 获取布局id
      * 优先使用

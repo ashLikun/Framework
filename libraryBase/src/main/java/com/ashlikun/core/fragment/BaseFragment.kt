@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -22,6 +23,7 @@ import com.ashlikun.okhttputils.http.OkHttpUtils
 import com.ashlikun.supertoobar.SuperToolBar
 import com.ashlikun.utils.ui.UiUtils
 import com.ashlikun.utils.ui.status.StatusBarCompat
+import kotlin.math.abs
 
 /**
  * @author　　: 李坤
@@ -36,7 +38,10 @@ import com.ashlikun.utils.ui.status.StatusBarCompat
  */
 abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //请求CODE
-    open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
+    open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
+    private val activityResultCalls: MutableMap<Int, (ActivityResult) -> Unit> by lazy {
+        mutableMapOf()
+    }
 
     //toolbar
     open val toolbar: SuperToolBar? by lazy {
@@ -73,7 +78,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     open val requireArguments: Bundle
         get() {
             if (arguments == null) arguments = Bundle()
-            return arguments!!
+            return requireArguments()
         }
 
     //BaseActivity
@@ -88,7 +93,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
         super.onCreate(savedInstanceState)
         val intent = Intent()
         if (arguments != null) {
-            intent.putExtras(arguments!!)
+            intent.putExtras(requireArguments)
         }
         parseIntent(intent)
     }
@@ -175,11 +180,13 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     override fun onLowMemory() {
         super.onLowMemory()
         cancelAllHttp()
+        activityResultCalls.clear()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cancelAllHttp()
+        activityResultCalls.clear()
     }
 
     override fun showLoading(data: ContextData) {
@@ -245,5 +252,18 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
      */
     override fun <T> getDispatcherMessage(what: Int): T? {
         return null
+    }
+
+    fun registerResultCall(requestCode: Int, call: (ActivityResult) -> Unit) {
+        activityResultCalls[requestCode] = call
+    }
+
+    fun unRegisterResultCall(requestCode: Int) {
+        activityResultCalls.remove(requestCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        activityResultCalls[requestCode]?.invoke(ActivityResult(requestCode, data))
     }
 }

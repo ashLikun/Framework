@@ -3,6 +3,7 @@ package com.ashlikun.core.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.launcher.ARouter
@@ -17,6 +18,7 @@ import com.ashlikun.okhttputils.http.OkHttpUtils
 import com.ashlikun.supertoobar.SuperToolBar
 import com.ashlikun.utils.bug.BugUtils
 import com.ashlikun.utils.ui.status.StatusBarCompat
+import kotlin.math.abs
 
 /**
  * @author　　: 李坤
@@ -30,8 +32,12 @@ import com.ashlikun.utils.ui.status.StatusBarCompat
  */
 
 abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMessage {
+    private val activityResultCalls: MutableMap<Int, (ActivityResult) -> Unit> by lazy {
+        mutableMapOf()
+    }
+
     //请求CODE
-    open var REQUEST_CODE = Math.abs(this.javaClass.simpleName.hashCode() % 60000)
+    open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
 
     //toolbar
     open val toolbar: SuperToolBar? by lazy {
@@ -194,18 +200,19 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     override fun onDestroy() {
         super.onDestroy()
         cancelAllHttp()
+        activityResultCalls.clear()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
         cancelAllHttp()
+        activityResultCalls.clear()
     }
 
 
     override fun showLoading(data: ContextData) {
         switchService?.showLoading(data)
     }
-
 
 
     override fun showContent() {
@@ -259,5 +266,10 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
 
     open fun getUserVisibleHint(): Boolean {
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        activityResultCalls[requestCode]?.invoke(ActivityResult(requestCode, data))
     }
 }
