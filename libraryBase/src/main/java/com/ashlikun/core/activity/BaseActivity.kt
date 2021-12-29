@@ -268,6 +268,13 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         return true
     }
 
+    fun registerResultCall(requestCode: Int, call: (ActivityResult) -> Unit) {
+        activityResultCalls[requestCode] = call
+    }
+
+    fun unRegisterResultCall(requestCode: Int) {
+        activityResultCalls.remove(requestCode)
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultCalls[requestCode]?.invoke(ActivityResult(requestCode, data))
