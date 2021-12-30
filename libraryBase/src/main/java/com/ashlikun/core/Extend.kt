@@ -61,10 +61,18 @@ fun <I, O> ComponentActivity.registerForActivityResultX(
     callback: (O) -> Unit
 ): ActivityResultLauncher<I> {
     var oldStatus: Lifecycle.State? = null
+    var oldHandlingEvent: Boolean? = null
+
     //反射修改字段
     if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
         oldStatus = lifecycle.currentState
         ClassUtils.setFieldValue(lifecycle, "mState", Lifecycle.State.CREATED)
+        //停止同步,不然状态会乱掉
+        oldHandlingEvent = ClassUtils.getFieldValue(lifecycle, "mHandlingEvent") as Boolean
+        if (!oldHandlingEvent) {
+            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", true)
+            oldHandlingEvent = null
+        }
     }
     //这段注册代码源码里面做了限制，必须在onStart之前，所以反射修改字段，骗过注册
     val launcher = registerForActivityResult(contract) {
@@ -72,6 +80,8 @@ fun <I, O> ComponentActivity.registerForActivityResultX(
     }
     if (oldStatus != null) {
         ClassUtils.setFieldValue(lifecycle, "mState", oldStatus)
+        if (oldHandlingEvent != null)
+            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", oldHandlingEvent)
     }
     return launcher
 }
@@ -103,10 +113,17 @@ fun <I, O> Fragment.registerForActivityResultX(
     callback: (O) -> Unit
 ): ActivityResultLauncher<I> {
     var oldStatus: Lifecycle.State? = null
+    var oldHandlingEvent: Boolean? = null
     //反射修改字段
     if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
         oldStatus = lifecycle.currentState
         ClassUtils.setFieldValue(lifecycle, "mState", Lifecycle.State.CREATED)
+        //停止同步,不然状态会乱掉
+        oldHandlingEvent = ClassUtils.getFieldValue(lifecycle, "mHandlingEvent") as Boolean
+        if (!oldHandlingEvent) {
+            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", true)
+            oldHandlingEvent = null
+        }
     }
     //这段注册代码源码里面做了限制，必须在onStart之前，所以反射修改字段，骗过注册
     val launcher = registerForActivityResult(contract) {
@@ -114,6 +131,8 @@ fun <I, O> Fragment.registerForActivityResultX(
     }
     if (oldStatus != null) {
         ClassUtils.setFieldValue(lifecycle, "mState", oldStatus)
+        if (oldHandlingEvent != null)
+            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", oldHandlingEvent)
     }
     return launcher
 }

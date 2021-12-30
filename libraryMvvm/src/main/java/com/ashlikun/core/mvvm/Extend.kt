@@ -11,7 +11,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 
 /**
- * 执行，常用于最外层
+ * 执行，常用于最外层,主线程Dispatchers.Main
  * 无阻塞的
  */
 inline fun ViewModel.launch(
@@ -42,7 +42,7 @@ inline fun <T> ViewModel.async(
 }
 
 /**
- * 执行，常用于最外层
+ * 执行，常用于最外层,主线程Dispatchers.Main
  * 无阻塞的
  */
 inline fun LifecycleOwner.launch(
