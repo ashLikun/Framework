@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelStoreOwner
  */
 open class XViewModelProvider(store: ViewModelStore, var factory: Factory) :
     ViewModelProvider(store, factory) {
-    private val keys = HashMap<String, Class<*>>()
+    private val keys = HashMap<String, Class<out ViewModel>>()
 
     constructor(owner: ViewModelStoreOwner, factory: Factory) : this(owner.viewModelStore, factory)
 
@@ -39,7 +39,7 @@ open class XViewModelProvider(store: ViewModelStore, var factory: Factory) :
 
     fun <T : ViewModel> forEach(block: (vm: T) -> Unit) {
         keys.forEach {
-            block.invoke(get(it.key))
+            block.invoke(get(it.key, it.value) as T)
         }
     }
 }

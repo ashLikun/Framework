@@ -20,7 +20,7 @@ open abstract class BaseMvvmActivity<VM : BaseViewModel>
     /**
      * 管理BaseViewModel
      */
-    val viewModelProvider: XViewModelProvider by lazy {
+    val viewModelProvider by lazy {
         XViewModelProvider(this, ViewModelFactoryImp(this))
     }
     val viewModel: VM by lazy {
