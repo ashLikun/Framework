@@ -114,33 +114,33 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
      */
     override fun handeBaseEventer(vm: BaseViewModel) {
         //观察者
-        vm.addObserver.observe(this, {
+        vm.addObserver.observe(this) {
             lifecycle.addObserver(it)
-        })
+        }
         //清空数据
-        vm.clearData.observe(this, {
+        vm.clearData.observe(this) {
             clearData()
-        })
+        }
         //销毁页面
-        vm.finish.observe(this, {
+        vm.finish.observe(this) {
             finish()
-        })
+        }
         //显示加载布局
-        vm.showLoading.observe(this, {
+        vm.showLoading.observe(this) {
             showLoading(it)
-        })
+        }
         //显示重新加载页面
-        vm.showRetry.observe(this, {
+        vm.showRetry.observe(this) {
             showRetry(it)
-        })
+        }
         //显示空页面
-        vm.showEmpty.observe(this, {
+        vm.showEmpty.observe(this) {
             showEmpty(it)
-        })
+        }
         //显示内容
-        vm.showContent.observe(this, {
+        vm.showContent.observe(this) {
             showContent()
-        })
+        }
     }
 
     /**
