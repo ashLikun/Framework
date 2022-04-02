@@ -1,11 +1,13 @@
 package com.ashlikun.core.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.BaseUtils.getSwitchLayoutListener
 import com.ashlikun.core.R
@@ -35,6 +37,14 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     private val activityResultCalls: MutableMap<Int, (ActivityResult) -> Unit> by lazy {
         mutableMapOf()
     }
+
+    //与Fragment方法统一 Context
+    open val requireContext: Context
+        get() = this
+
+    //与Fragment方法统一  activity
+    open val requireActivity: BaseActivity
+        get() = this
 
     //请求CODE
     open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
@@ -275,6 +285,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     fun unRegisterResultCall(requestCode: Int) {
         activityResultCalls.remove(requestCode)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultCalls[requestCode]?.invoke(ActivityResult(requestCode, data))
