@@ -2,6 +2,7 @@ package com.ashlikun.core.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -9,6 +10,7 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.launcher.ARouter
+import com.ashlikun.core.BaseUtils
 import com.ashlikun.core.BaseUtils.getSwitchLayoutListener
 import com.ashlikun.core.R
 import com.ashlikun.core.listener.IBaseWindow
@@ -34,8 +36,16 @@ import kotlin.math.abs
  */
 
 abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMessage {
+
     private val activityResultCalls: MutableMap<Int, (ActivityResult) -> Unit> by lazy {
         mutableMapOf()
+    }
+
+    /**
+     * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
+     */
+    protected open val myResources: Resources by lazy {
+        BaseUtils.onActivityGetResources?.invoke(super.getResources()) ?: super.getResources()
     }
 
     //与Fragment方法统一 Context
@@ -70,7 +80,12 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
             .register(switchRoot, getSwitchLayoutListener(this, this))
     }
 
+    override fun getResources(): Resources {
+        return myResources
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        BaseUtils.onActivityPreCreated?.invoke(this, savedInstanceState)
         BugUtils.orientationBug8_0(this)
         super.onCreate(savedInstanceState)
         if (intent == null) {
