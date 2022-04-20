@@ -13,6 +13,7 @@ import com.ashlikun.utils.other.ClassUtils
 import com.ashlikun.utils.ui.extend.hineIme
 import com.ashlikun.utils.ui.extend.showIme
 import com.ashlikun.utils.ui.status.StatusBarCompat
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * 作者　　: 李坤
@@ -53,35 +54,20 @@ fun Activity.finishNoAnim() {
     finish()
 }
 
+
 /**
  * 新的启动api
+ * @param contract [ActivityResultContract.StartActivityForResult]  or  [ActivityResultContracts.RequestMultiplePermissions()]
  */
 fun <I, O> ComponentActivity.registerForActivityResultX(
-    contract: ActivityResultContract<I, O>,
-    callback: (O) -> Unit
+    contract: ActivityResultContract<I, O>, callback: (O) -> Unit
 ): ActivityResultLauncher<I> {
-    var oldStatus: Lifecycle.State? = null
-    var oldHandlingEvent: Boolean? = null
-
-    //反射修改字段
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-        oldStatus = lifecycle.currentState
-        ClassUtils.setFieldValue(lifecycle, "mState", Lifecycle.State.CREATED)
-        //停止同步,不然状态会乱掉
-        oldHandlingEvent = ClassUtils.getFieldValue(lifecycle, "mHandlingEvent") as Boolean
-        if (!oldHandlingEvent) {
-            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", true)
-            oldHandlingEvent = null
-        }
-    }
-    //这段注册代码源码里面做了限制，必须在onStart之前，所以反射修改字段，骗过注册
-    val launcher = registerForActivityResult(contract) {
+    var launcher: ActivityResultLauncher<I>? = null
+    //这种注册需要自己unregister
+    launcher = activityResultRegistry.register("ForActivityResult" + AtomicInteger().getAndIncrement(), contract) {
         callback.invoke(it)
-    }
-    if (oldStatus != null) {
-        ClassUtils.setFieldValue(lifecycle, "mState", oldStatus)
-        if (oldHandlingEvent != null)
-            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", oldHandlingEvent)
+        //这里主动释放
+        launcher?.unregister()
     }
     return launcher
 }
@@ -89,19 +75,16 @@ fun <I, O> ComponentActivity.registerForActivityResultX(
 
 /**
  * 启动activity,用新api registerForActivityResult
+ * @param checkCode 是否只有Activity.RESULT_OK 才回调成功
  */
 fun ComponentActivity.launchForActivityResult(
-    intent: Intent,
-    checkCode: Boolean = true,
-    success: ((ActivityResult) -> Unit)
+    intent: Intent, checkCode: Boolean = false, success: ((ActivityResult) -> Unit)
 ): ActivityResultLauncher<Intent> {
-    val launcher = registerForActivityResultX(ActivityResultContracts.StartActivityForResult()) {
+    return registerForActivityResultX(ActivityResultContracts.StartActivityForResult()) {
         if (!checkCode || it.resultCode == Activity.RESULT_OK) {
             success.invoke(it)
         }
-    }
-    launcher.launch(intent)
-    return launcher
+    }.apply { launch(intent) }
 }
 
 
@@ -109,48 +92,14 @@ fun ComponentActivity.launchForActivityResult(
  * 新的启动api
  */
 fun <I, O> Fragment.registerForActivityResultX(
-    contract: ActivityResultContract<I, O>,
-    callback: (O) -> Unit
-): ActivityResultLauncher<I> {
-    var oldStatus: Lifecycle.State? = null
-    var oldHandlingEvent: Boolean? = null
-    //反射修改字段
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-        oldStatus = lifecycle.currentState
-        ClassUtils.setFieldValue(lifecycle, "mState", Lifecycle.State.CREATED)
-        //停止同步,不然状态会乱掉
-        oldHandlingEvent = ClassUtils.getFieldValue(lifecycle, "mHandlingEvent") as Boolean
-        if (!oldHandlingEvent) {
-            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", true)
-            oldHandlingEvent = null
-        }
-    }
-    //这段注册代码源码里面做了限制，必须在onStart之前，所以反射修改字段，骗过注册
-    val launcher = registerForActivityResult(contract) {
-        callback.invoke(it)
-    }
-    if (oldStatus != null) {
-        ClassUtils.setFieldValue(lifecycle, "mState", oldStatus)
-        if (oldHandlingEvent != null)
-            ClassUtils.setFieldValue(lifecycle, "mHandlingEvent", oldHandlingEvent)
-    }
-    return launcher
-}
+    contract: ActivityResultContract<I, O>, callback: (O) -> Unit
+) = requireActivity().registerForActivityResult(contract, callback)
 
 /**
  * 启动activity,用新api registerForActivityResult
+ * @param checkCode 是否只有Activity.RESULT_OK 才回调成功
  */
 fun Fragment.launchForActivityResult(
-    intent: Intent,
-    checkCode: Boolean = true,
-    success: ((ActivityResult) -> Unit)
-): ActivityResultLauncher<Intent> {
-    val launcher = registerForActivityResultX(ActivityResultContracts.StartActivityForResult()) {
-        if (!checkCode || it.resultCode == Activity.RESULT_OK) {
-            success.invoke(it)
-        }
-    }
-    launcher.launch(intent)
-    return launcher
-}
+    intent: Intent, checkCode: Boolean = false, success: ((ActivityResult) -> Unit)
+): ActivityResultLauncher<Intent> = requireActivity().launchForActivityResult(intent, checkCode, success)
 
