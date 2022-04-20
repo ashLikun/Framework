@@ -24,7 +24,7 @@ class MyApp : MultiDexApplication() {
         AppUtils.init(this)
         ARouter.init(this)
         LiteOrmUtil.init(this)
-        OkHttpUtils.init(null)
+        OkHttpUtils.init(this, null)
         BaseUtils.coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Log.e("MyApp", "coroutineExceptionHandler")
             t.printStackTrace()
