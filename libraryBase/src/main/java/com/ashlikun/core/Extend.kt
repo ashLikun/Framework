@@ -58,16 +58,22 @@ fun Activity.finishNoAnim() {
 /**
  * 新的启动api
  * @param contract [ActivityResultContract.StartActivityForResult]  or  [ActivityResultContracts.RequestMultiplePermissions()]
+ * @param isUnregister 是否返回的时候 释放
+ * @param key key的前缀
  */
 fun <I, O> ComponentActivity.registerForActivityResultX(
-    contract: ActivityResultContract<I, O>, callback: (O) -> Unit
+    contract: ActivityResultContract<I, O>,
+    isUnregister: Boolean = true,
+    key: String = "ForActivityResult",
+    callback: (O) -> Unit
 ): ActivityResultLauncher<I> {
     var launcher: ActivityResultLauncher<I>? = null
     //这种注册需要自己unregister
-    launcher = activityResultRegistry.register("ForActivityResult" + AtomicInteger().getAndIncrement(), contract) {
+    launcher = activityResultRegistry.register(key + AtomicInteger().getAndIncrement(), contract) {
         callback.invoke(it)
         //这里主动释放
-        launcher?.unregister()
+        if (isUnregister)
+            launcher!!.unregister()
     }
     return launcher
 }
@@ -78,9 +84,12 @@ fun <I, O> ComponentActivity.registerForActivityResultX(
  * @param checkCode 是否只有Activity.RESULT_OK 才回调成功
  */
 fun ComponentActivity.launchForActivityResult(
-    intent: Intent, checkCode: Boolean = false, success: ((ActivityResult) -> Unit)
+    intent: Intent, checkCode: Boolean = false,
+    isUnregister: Boolean = true,
+    key: String = "launchForActivityResult",
+    success: ((ActivityResult) -> Unit)
 ): ActivityResultLauncher<Intent> {
-    return registerForActivityResultX(ActivityResultContracts.StartActivityForResult()) {
+    return registerForActivityResultX(ActivityResultContracts.StartActivityForResult(), key = key, isUnregister = isUnregister) {
         if (!checkCode || it.resultCode == Activity.RESULT_OK) {
             success.invoke(it)
         }
@@ -92,14 +101,18 @@ fun ComponentActivity.launchForActivityResult(
  * 新的启动api
  */
 fun <I, O> Fragment.registerForActivityResultX(
-    contract: ActivityResultContract<I, O>, callback: (O) -> Unit
-) = requireActivity().registerForActivityResult(contract, callback)
+    contract: ActivityResultContract<I, O>, isUnregister: Boolean = true,
+    key: String = "ForActivityResult",
+    callback: (O) -> Unit
+) = requireActivity().registerForActivityResultX(contract, isUnregister, key, callback)
 
 /**
  * 启动activity,用新api registerForActivityResult
  * @param checkCode 是否只有Activity.RESULT_OK 才回调成功
  */
 fun Fragment.launchForActivityResult(
-    intent: Intent, checkCode: Boolean = false, success: ((ActivityResult) -> Unit)
-): ActivityResultLauncher<Intent> = requireActivity().launchForActivityResult(intent, checkCode, success)
+    intent: Intent, checkCode: Boolean = false, isUnregister: Boolean = true,
+    key: String = "launchForActivityResult",
+    success: ((ActivityResult) -> Unit)
+): ActivityResultLauncher<Intent> = requireActivity().launchForActivityResult(intent, checkCode, isUnregister, key, success)
 

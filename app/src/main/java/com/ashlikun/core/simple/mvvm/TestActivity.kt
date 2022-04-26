@@ -14,7 +14,7 @@ import com.ashlikun.utils.other.LogUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
 
 @IViewModel(MainViewModel::class)
-class Main2Activity : BaseMvvmActivity<MainViewModel>() {
+class TestActivity : BaseMvvmActivity<MainViewModel>() {
     override val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun initViewModel() {
@@ -28,23 +28,12 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
     }
 
     fun onclick1(v: View) {
-        launch(context = CoroutineExceptionHandler { _, t ->
-            Log.e("Main2Activity", "onclick1: 11111")
-            t.printStackTrace()
-        }) {
-            throw NullPointerException()
-        }
-        launchForActivityResult(Intent(this, TestActivity::class.java)) {
-            LogUtils.e("dddd" + it.data?.getStringExtra("aaa"))
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
+        setResult(RESULT_OK, Intent().putExtra("aaa", "dddddddddd"))
+        finish()
     }
 
     override fun initView() {
+        binding.button.text = "返回"
 //        if (supportFragmentManager.fragments.size == 0) {
 //            val f1 = Main2Fragment()
 //            val f2 = Main2Fragment()
