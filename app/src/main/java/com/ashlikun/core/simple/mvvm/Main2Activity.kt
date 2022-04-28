@@ -45,6 +45,7 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
     }
 
     override fun initView() {
+        LogUtils.e("initView")
 //        if (supportFragmentManager.fragments.size == 0) {
 //            val f1 = Main2Fragment()
 //            val f2 = Main2Fragment()
