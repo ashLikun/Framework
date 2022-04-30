@@ -59,8 +59,8 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
 
     //布局切换
     override val switchService: LoadSwitchService? by lazy {
-        if (switchRoot == null) null else LoadSwitch.get()
-            .register(switchRoot, BaseUtils.getSwitchLayoutListener(requireContext, this))
+        if (switchRoot == null) null else LoadSwitch()
+            .create(switchRoot!!, BaseUtils.getSwitchLayoutListener(requireContext, this))
     }
 
     //是否是回收利用的Fragment

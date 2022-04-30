@@ -75,7 +75,7 @@ dependencies {
     //习惯的对话框
     implementation 'com.github.ashLikun:CustomDialog:+'
     //布局切换神器
-    implementation 'com.github.ashLikun:LoadSwitch:+'
+    implementation 'com.github.ashLikun:LoadSwitch:2.0.9'
     //Okhttp工具
     implementation 'com.github.ashLikun:OkHttpUtils:+'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'

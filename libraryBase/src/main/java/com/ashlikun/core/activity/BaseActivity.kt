@@ -8,7 +8,6 @@ import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.BaseUtils
 import com.ashlikun.core.BaseUtils.getSwitchLayoutListener
@@ -76,8 +75,8 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
 
     //布局切换
     override val switchService: LoadSwitchService? by lazy {
-        if (switchRoot == null) null else LoadSwitch.get()
-            .register(switchRoot, getSwitchLayoutListener(this, this))
+        if (switchRoot == null) null else LoadSwitch()
+            .create(switchRoot!!, getSwitchLayoutListener(this, this))
     }
 
     override fun getResources(): Resources {
