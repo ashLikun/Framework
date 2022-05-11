@@ -73,7 +73,7 @@ fun <I, O> ComponentActivity.registerForActivityResultX(
         callback.invoke(it)
         //这里主动释放
         if (isUnregister)
-            launcher!!.unregister()
+            launcher?.unregister()
     }
     return launcher
 }
