@@ -54,6 +54,7 @@ fun Activity.finishNoAnim() {
     finish()
 }
 
+val atomicInteger = AtomicInteger()
 
 /**
  * 新的启动api
@@ -69,7 +70,7 @@ fun <I, O> ComponentActivity.registerForActivityResultX(
 ): ActivityResultLauncher<I> {
     var launcher: ActivityResultLauncher<I>? = null
     //这种注册需要自己unregister
-    launcher = activityResultRegistry.register(key + AtomicInteger().getAndIncrement(), contract) {
+    launcher = activityResultRegistry.register(key + atomicInteger.getAndIncrement(), contract) {
         callback.invoke(it)
         //这里主动释放
         if (isUnregister)
