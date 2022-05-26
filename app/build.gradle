@@ -75,12 +75,12 @@ dependencies {
     //习惯的对话框
     implementation 'com.github.ashLikun:CustomDialog:+'
     //布局切换神器
-    implementation 'com.github.ashLikun:LoadSwitch:2.0.9'
+    implementation 'com.github.ashLikun:LoadSwitch:+'
     //Okhttp工具
     implementation 'com.github.ashLikun:OkHttpUtils:+'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.github.ashLikun:MultiTypeGson:2.0.9'
+    implementation 'com.github.ashLikun:MultiTypeGson:+'
     implementation 'com.github.ashLikun:LiteOrm:2.0.2'
     implementation('com.alibaba:arouter-api:+') {
         // if you don't use android.app.Fragment you can exclude support for them
