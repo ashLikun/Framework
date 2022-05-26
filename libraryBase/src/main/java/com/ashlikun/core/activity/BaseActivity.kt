@@ -10,7 +10,6 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.BaseUtils
-import com.ashlikun.core.BaseUtils.getSwitchLayoutListener
 import com.ashlikun.core.R
 import com.ashlikun.core.listener.IBaseWindow
 import com.ashlikun.core.listener.OnDispatcherMessage
@@ -48,7 +47,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     }
 
     //与Fragment方法统一 Context
-    open val requireContext: Context
+    override val requireContext: Context
         get() = this
 
     //与Fragment方法统一  activity
@@ -76,7 +75,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     //布局切换
     override val switchService: LoadSwitchService? by lazy {
         if (switchRoot == null) null else LoadSwitch()
-            .create(switchRoot!!, getSwitchLayoutListener(this, this))
+            .create(switchRoot!!, createSwitchLayoutListener())
     }
 
     override fun getResources(): Resources {

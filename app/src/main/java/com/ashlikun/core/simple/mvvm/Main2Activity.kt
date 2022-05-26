@@ -1,14 +1,22 @@
 package com.ashlikun.core.simple.mvvm
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.PermissionChecker
 import androidx.fragment.app.FragmentManager
 import com.ashlikun.core.launchForActivityResult
 import com.ashlikun.core.mvvm.BaseMvvmActivity
 import com.ashlikun.core.mvvm.IViewModel
 import com.ashlikun.core.mvvm.launch
+import com.ashlikun.core.registerForActivityResultX
 import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.utils.other.LogUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -36,6 +44,9 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
         }
         launchForActivityResult(Intent(this, TestActivity::class.java)) {
             LogUtils.e("dddd" + it.data?.getStringExtra("aaa"))
+            launchForActivityResult(Intent(this, TestActivity::class.java)) {
+                LogUtils.e("dddd" + it.data?.getStringExtra("aaa"))
+            }
         }
     }
 
@@ -43,6 +54,8 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
         super.onActivityResult(requestCode, resultCode, data)
 
     }
+
+
 
     override fun initView() {
         LogUtils.e("initView")

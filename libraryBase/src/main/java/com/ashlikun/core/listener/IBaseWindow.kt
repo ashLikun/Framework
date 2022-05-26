@@ -1,10 +1,10 @@
 package com.ashlikun.core.listener
 
-import android.content.Intent
+import android.content.Context
 import android.view.View
-import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.viewbinding.ViewBinding
+import com.ashlikun.core.BaseUtils
 import com.ashlikun.loadswitch.ContextData
 import com.ashlikun.loadswitch.LoadSwitchService
 import com.ashlikun.loadswitch.OnLoadSwitchClick
@@ -17,7 +17,7 @@ import com.ashlikun.loadswitch.OnLoadSwitchClick
  * 功能介绍：一个窗口要实现的接口
  */
 interface IBaseWindow : OnLoadSwitchClick {
-
+    val requireContext: Context
 
     /**
      * 获取布局id
@@ -121,4 +121,6 @@ interface IBaseWindow : OnLoadSwitchClick {
     fun <T : View?> f(@IdRes id: Int): T?
     override fun onRetryClick(data: ContextData) {}
     override fun onEmptyClick(data: ContextData) {}
+
+    fun createSwitchLayoutListener() = BaseUtils.createSwitchLayoutListener(this)
 }

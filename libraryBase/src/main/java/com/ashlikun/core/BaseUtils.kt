@@ -36,7 +36,7 @@ object BaseUtils {
     /**
      * 布局切换的布局渲染事件,必须有双参数构造方法
      */
-    var switchLayoutListener: Class<out OnLoadLayoutListener>? = null
+    var switchLayoutListener: ((context: Context) -> OnLoadLayoutListener)? = null
 
     /**
      * ViewBinding反射的缓存
@@ -51,46 +51,18 @@ object BaseUtils {
      */
     var coroutineExceptionHandler: CoroutineContext? = null
 
-    fun init(listener: Class<out OnLoadLayoutListener>?) {
-        switchLayoutListener = listener
-    }
 
     /**
-     * 通过反射 获取设置的全局OnLoadLayoutListener
+     *  获取设置的全局OnLoadLayoutListener
      */
-    fun getSwitchLayoutListener(context: Context, window: IBaseWindow) =
-        getSwitchLayoutListener(context, window.onLoadSwitchClick)
+    fun createSwitchLayoutListener(window: IBaseWindow) =
+        createSwitchLayoutListener(window.requireContext, window.onLoadSwitchClick)
 
     /**
      * 获取设置的全局OnLoadLayoutListener
      */
-    fun getSwitchLayoutListener(context: Context, click: OnLoadSwitchClick?): OnLoadLayoutListener {
-        var loadLayoutListener: OnLoadLayoutListener? = null
-        if (switchLayoutListener != null) {
-            try {
-                //获取构造函数
-                val con: Constructor<*> = switchLayoutListener!!.getConstructor(
-                    Context::class.java,
-                    OnLoadSwitchClick::class.java
-                )
-                loadLayoutListener = con.newInstance(context, click) as OnLoadLayoutListener
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            if (loadLayoutListener == null) {
-                try {
-                    loadLayoutListener =
-                        switchLayoutListener!!.newInstance()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        if (loadLayoutListener == null) {
-            loadLayoutListener = DefaultOnLoadLayoutListener(context, click)
-        }
-        return loadLayoutListener
-    }
+    fun createSwitchLayoutListener(context: Context, click: OnLoadSwitchClick?) =
+        switchLayoutListener?.invoke(context) ?: DefaultOnLoadLayoutListener(context, click)
 
     /**
      * 反射查找ViewBinding的view
