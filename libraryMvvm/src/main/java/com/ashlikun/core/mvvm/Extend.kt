@@ -1,10 +1,11 @@
 package com.ashlikun.core.mvvm
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
+import android.view.View
+import androidx.lifecycle.*
 import com.ashlikun.core.BaseUtils
+import com.ashlikun.utils.other.coroutines.IODispatcher
+import com.ashlikun.utils.other.coroutines.IoScope
+import com.ashlikun.utils.other.coroutines.ThreadPoolDispatcher
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -20,6 +21,34 @@ inline fun ViewModel.launch(
     noinline job: suspend () -> Unit
 ): Job {
     return viewModelScope.launch(checkCoroutineExceptionHandler(context)) {
+        delay(delayTime)
+        job()
+    }
+}
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun ViewModel.launchIO(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+): Job {
+    return viewModelScope.launch(checkCoroutineExceptionHandler(IODispatcher + context)) {
+        delay(delayTime)
+        job()
+    }
+}
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun ViewModel.launchThreadPoll(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+): Job {
+    return viewModelScope.launch(checkCoroutineExceptionHandler(ThreadPoolDispatcher + context)) {
         delay(delayTime)
         job()
     }
@@ -57,6 +86,34 @@ inline fun LifecycleOwner.launch(
 }
 
 /**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun LifecycleOwner.launchIO(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+): Job {
+    return lifecycleScope.launch(checkCoroutineExceptionHandler(IODispatcher + context)) {
+        delay(delayTime)
+        job()
+    }
+}
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun LifecycleOwner.launchThreadPoll(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+): Job {
+    return lifecycleScope.launch(checkCoroutineExceptionHandler(ThreadPoolDispatcher + context)) {
+        delay(delayTime)
+        job()
+    }
+}
+
+/**
  * 异步执行，常用于最外层
  * 多个 async 任务是并行的
  * 特点带返回值 async 返回的是一个Deferred<T>，需要调用其await()方法获取结果。
@@ -71,6 +128,45 @@ inline fun <T> LifecycleOwner.async(
         job()
     }
 }
+
+/**
+ * 执行，常用于最外层,主线程Dispatchers.Main
+ * 无阻塞的
+ */
+inline fun View.launch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = findViewTreeLifecycleOwner()!!.launch(context, delayTime, job)
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun View.launchIO(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = findViewTreeLifecycleOwner()!!.launchIO(context, delayTime, job)
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun View.launchThreadPoll(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = findViewTreeLifecycleOwner()!!.launchThreadPoll(context, delayTime, job)
+
+/**
+ * 异步执行，常用于最外层
+ * 多个 async 任务是并行的
+ * 特点带返回值 async 返回的是一个Deferred<T>，需要调用其await()方法获取结果。
+ */
+inline fun <T> View.async(
+    context: CoroutineContext = EmptyCoroutineContext,
+    delayTime: Long = 0,
+    noinline job: suspend () -> T
+) = findViewTreeLifecycleOwner()!!.async(context, delayTime, job)
 
 inline fun checkCoroutineExceptionHandler(context: CoroutineContext): CoroutineContext {
     var ct = context
