@@ -1,11 +1,14 @@
 package com.ashlikun.core.mvvm
 
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.ashlikun.core.BaseUtils
+import com.ashlikun.core.activity.BaseActivity
 import com.ashlikun.utils.other.coroutines.IODispatcher
 import com.ashlikun.utils.other.coroutines.IoScope
 import com.ashlikun.utils.other.coroutines.ThreadPoolDispatcher
+import com.ashlikun.utils.ui.ActivityManager
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -183,3 +186,25 @@ inline fun checkCoroutineExceptionHandler(context: CoroutineContext): CoroutineC
 //    }
     return ct
 }
+
+/**
+ * 获取Fragment
+ */
+inline fun <reified T : BaseMvvmFragment<*>> FragmentActivity.mvvmFragment(): T? {
+    return (supportFragmentManager?.fragments?.find { T::class.java.isAssignableFrom(it.javaClass) } as? T)
+}
+
+/**
+ * 获取Fragment
+ */
+inline fun <reified T : BaseMvvmFragment<*>> FragmentActivity.baseFr(): T? {
+    return (supportFragmentManager?.fragments?.find { T::class.java.isAssignableFrom(it.javaClass) } as? T)
+}
+
+/**
+ * 获取前台 Activity
+ */
+inline val fBaseActivity: BaseActivity?
+    get() = ActivityManager.get().getTagActivity(BaseActivity::class.java)
+inline val fFActivity: FragmentActivity?
+    get() = ActivityManager.get().getTagActivity(FragmentActivity::class.java)
