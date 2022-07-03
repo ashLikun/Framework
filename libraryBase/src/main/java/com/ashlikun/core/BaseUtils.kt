@@ -36,7 +36,7 @@ object BaseUtils {
     /**
      * 布局切换的布局渲染事件,必须有双参数构造方法
      */
-    var switchLayoutListener: ((context: Context) -> OnLoadLayoutListener)? = null
+    var switchLayoutListener: ((context: Context, click: OnLoadSwitchClick?) -> OnLoadLayoutListener?)? = null
 
     /**
      * ViewBinding反射的缓存
@@ -62,7 +62,7 @@ object BaseUtils {
      * 获取设置的全局OnLoadLayoutListener
      */
     fun createSwitchLayoutListener(context: Context, click: OnLoadSwitchClick?) =
-        switchLayoutListener?.invoke(context) ?: DefaultOnLoadLayoutListener(context, click)
+        switchLayoutListener?.invoke(context, click) ?: DefaultOnLoadLayoutListener(context, click)
 
     /**
      * 反射查找ViewBinding的view
