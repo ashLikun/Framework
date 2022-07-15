@@ -12,6 +12,7 @@ import com.ashlikun.okhttputils.http.OkHttpUtils
 import com.ashlikun.utils.main.ActivityUtils
 import com.ashlikun.utils.ui.ActivityManager
 import java.lang.NullPointerException
+import kotlin.math.abs
 import kotlin.reflect.KClass
 
 /**
@@ -23,7 +24,10 @@ import kotlin.reflect.KClass
  */
 
 open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
-    SimpleLifecycleObserver, LifecycleOwner {
+    SimpleLifecycleObserver {
+    //请求CODE
+    open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
+
     //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常
     //标记是否与宿主断开，就是宿主是否销毁（准备开始重建）
     internal var isDestroy = false
@@ -37,8 +41,10 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     //感知页面生命周期
     var lifecycleOwner: LifecycleOwner? = null
 
-    //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常 结束
+    val requireLife: LifecycleOwner
+        get() = lifecycleOwner ?: throw NullPointerException(this::class.java.name + "lifecycleOwner is Null")
 
+    //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常 结束
 
     //VM是否Cleared
     var isCleared = false
@@ -180,8 +186,4 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
      */
     inline fun <reified T : Any?> get() = MutableLiveData<T>()
 
-    /**
-     * 代理Lifecycle
-     */
-    override fun getLifecycle() = lifecycleOwner?.lifecycle ?: throw NullPointerException(this::class.java.name + "lifecycleOwner is Null")
 }
