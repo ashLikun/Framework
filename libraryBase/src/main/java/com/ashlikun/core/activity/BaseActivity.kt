@@ -2,6 +2,7 @@ package com.ashlikun.core.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -86,16 +87,23 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         return myResources
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        if (newBase != null) {
-            var newContext = newBase!!
-            BaseUtils?.onAttachBaseContext?.forEach {
-                newContext = it(newContext)
-            }
-            super.attachBaseContext(newContext)
-        } else {
-            super.attachBaseContext(newBase)
+    var baseContextIsChang = false
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
+        var newConfiguration = overrideConfiguration
+        BaseUtils.onApplyOverrideConfiguration.forEach {
+            newConfiguration = it(newConfiguration)
         }
+        super.applyOverrideConfiguration(newConfiguration)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        var newContext = newBase
+        BaseUtils.onAttachBaseContext.forEach {
+            newContext = it(newContext)
+            baseContextIsChang = newContext != newBase
+        }
+        super.attachBaseContext(newContext)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
