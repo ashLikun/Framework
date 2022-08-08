@@ -43,7 +43,11 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
      */
     protected open val myResources: Resources by lazy {
-        BaseUtils.onActivityGetResources?.invoke(super.getResources()) ?: super.getResources()
+        var result = super.getResources()
+        BaseUtils.onActivityGetResources.forEach {
+            result = it(result)
+        }
+        result
     }
 
     //与Fragment方法统一 Context
@@ -82,8 +86,22 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         return myResources
     }
 
+    override fun attachBaseContext(newBase: Context?) {
+        if (newBase != null) {
+            var newContext = newBase!!
+            BaseUtils?.onAttachBaseContext?.forEach {
+                newContext = it(newContext)
+            }
+            super.attachBaseContext(newContext)
+        } else {
+            super.attachBaseContext(newBase)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseUtils.onActivityPreCreated?.invoke(this, savedInstanceState)
+        BaseUtils.onActivityPreCreated.forEach {
+            it(this, savedInstanceState)
+        }
         BugUtils.orientationBug8_0(this)
         super.onCreate(savedInstanceState)
         if (intent == null) {

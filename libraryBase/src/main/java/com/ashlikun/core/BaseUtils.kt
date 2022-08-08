@@ -26,12 +26,17 @@ object BaseUtils {
     /**
      * Activity onCreate创建之前
      */
-    var onActivityPreCreated: ((activity: Activity, savedInstanceState: Bundle?) -> Unit)? = null
+    val onActivityPreCreated = mutableListOf<((activity: Activity, savedInstanceState: Bundle?) -> Unit)>()
+
+    /**
+     * Activity onAttachBaseContext
+     */
+    val onAttachBaseContext = mutableListOf<((context: Context) -> Context)>()
 
     /**
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
      */
-    var onActivityGetResources: ((result: Resources) -> Resources)? = null
+    var onActivityGetResources = mutableListOf<((result: Resources) -> Resources)>()
 
     /**
      * 布局切换的布局渲染事件,必须有双参数构造方法
