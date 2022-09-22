@@ -2,6 +2,7 @@ package com.ashlikun.core
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,12 +27,22 @@ object BaseUtils {
     /**
      * Activity onCreate创建之前
      */
-    var onActivityPreCreated: ((activity: Activity, savedInstanceState: Bundle?) -> Unit)? = null
+    val onActivityPreCreated = mutableListOf<((activity: Activity, savedInstanceState: Bundle?) -> Unit)>()
+
+    /**
+     * Activity onAttachBaseContext
+     */
+    val onAttachBaseContext = mutableListOf<((context: Context) -> Context)>()
+
+    /**
+     * Activity applyOverrideConfiguration
+     */
+    val onApplyOverrideConfiguration = mutableListOf<((configuration: Configuration) -> Configuration)>()
 
     /**
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
      */
-    var onActivityGetResources: ((result: Resources) -> Resources)? = null
+    var onActivityGetResources = mutableListOf<((result: Resources) -> Resources)>()
 
     /**
      * 布局切换的布局渲染事件,必须有双参数构造方法

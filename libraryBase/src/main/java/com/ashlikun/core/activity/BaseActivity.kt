@@ -2,6 +2,7 @@ package com.ashlikun.core.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -43,7 +44,11 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
      */
     protected open val myResources: Resources by lazy {
-        BaseUtils.onActivityGetResources?.invoke(super.getResources()) ?: super.getResources()
+        var result = super.getResources()
+        BaseUtils.onActivityGetResources.forEach {
+            result = it(result)
+        }
+        result
     }
 
     //与Fragment方法统一 Context
@@ -82,8 +87,29 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         return myResources
     }
 
+    var baseContextIsChang = false
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
+        var newConfiguration = overrideConfiguration
+        BaseUtils.onApplyOverrideConfiguration.forEach {
+            newConfiguration = it(newConfiguration)
+        }
+        super.applyOverrideConfiguration(newConfiguration)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        var newContext = newBase
+        BaseUtils.onAttachBaseContext.forEach {
+            newContext = it(newContext)
+            baseContextIsChang = newContext != newBase
+        }
+        super.attachBaseContext(newContext)
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseUtils.onActivityPreCreated?.invoke(this, savedInstanceState)
+        BaseUtils.onActivityPreCreated.forEach {
+            it(this, savedInstanceState)
+        }
         BugUtils.orientationBug8_0(this)
         super.onCreate(savedInstanceState)
         if (intent == null) {
