@@ -68,7 +68,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     open protected var isRecycle = false
 
     //是否懒加载 布局
-    open protected var isLazy = false
+    open protected val isLazy = false
 
     //懒加载是否完成
     private var isLazyOk = false

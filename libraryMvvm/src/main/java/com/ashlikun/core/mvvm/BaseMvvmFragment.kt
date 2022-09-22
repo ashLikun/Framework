@@ -16,12 +16,6 @@ import com.ashlikun.core.fragment.BaseFragment
  */
 open abstract class BaseMvvmFragment<VM : BaseViewModel>
     : BaseFragment(), MvvmBaseInterface {
-    override var isLazy: Boolean = false
-        set(value) {
-            field = value
-            viewModel.isLazy = value
-        }
-
     /**
      * 管理BaseViewModel
      */
@@ -40,6 +34,7 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         //初始化
         viewModel.dataInit
+        viewModel.isLazy = isLazy
         initViewModel()
         super.onCreate(savedInstanceState)
     }
