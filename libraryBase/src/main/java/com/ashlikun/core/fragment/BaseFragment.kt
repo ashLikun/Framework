@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -66,6 +67,12 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //是否是回收利用的Fragment
     open protected var isRecycle = false
 
+    //是否懒加载 布局
+    open protected var isLazy = false
+
+    //懒加载是否完成
+    private var isLazyOk = false
+
     //宿主activity
     open val requireActivity: FragmentActivity
         get() = requireActivity()
@@ -103,12 +110,17 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     ): View? {
         if (rootView == null) {
             isRecycle = false
-            setContentView()
+            if (!isLazy) {
+                setContentView()
+            } else {
+                //懒加载模式,使用一个空布局
+                rootView = FrameLayout(inflater.context)
+            }
+
         } else {
             isRecycle = true
-            val parent: ViewGroup = rootView!!.parent as ViewGroup
-            if (parent != null) {
-                parent.removeView(rootView)
+            (rootView?.parent as? ViewGroup)?.apply {
+                removeView(rootView)
             }
         }
         return rootView
@@ -138,11 +150,35 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (!isLazy) {
+            onMyCreated()
+        }
+    }
+
+    override fun onResume() {
+        if (isLazy && !isLazyOk) {
+            //记录默认布局
+            val parent = rootView as? ViewGroup
+            //加载真实布局
+            setContentView()
+            (rootView?.parent as? ViewGroup)?.apply {
+                removeView(rootView)
+            }
+            //添加到中间布局
+            parent?.addView(rootView)
+            onMyCreated()
+        }
+        super.onResume()
+    }
+
+    private fun onMyCreated() {
+        isLazyOk = true
         if (!isRecycle) {
             baseInitView()
             initView()
             initData()
         }
+
     }
 
     /**

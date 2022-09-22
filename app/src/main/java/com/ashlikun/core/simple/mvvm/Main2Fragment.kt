@@ -5,11 +5,15 @@ import android.os.Bundle
 import com.ashlikun.core.mvvm.BaseMvvmFragment
 import com.ashlikun.core.simple.R
 import com.ashlikun.core.simple.databinding.ActivityMainBinding
+import com.ashlikun.core.simple.databinding.FragmentMainBinding
 import com.ashlikun.utils.other.LogUtils
 
 class Main2Fragment : BaseMvvmFragment<MainViewModel2>() {
-    override val layoutId = R.layout.activity_main
-    override val binding = ActivityMainBinding.inflate(layoutInflater)
+    override var isLazy: Boolean = true
+    override val binding by lazy {
+        FragmentMainBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         LogUtils.e("onCreate")
         super.onCreate(savedInstanceState)

@@ -17,6 +17,7 @@ import com.ashlikun.core.mvvm.BaseMvvmActivity
 import com.ashlikun.core.mvvm.IViewModel
 import com.ashlikun.core.mvvm.launch
 import com.ashlikun.core.registerForActivityResultX
+import com.ashlikun.core.simple.R
 import com.ashlikun.core.simple.databinding.ActivityMainBinding
 import com.ashlikun.utils.other.LogUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -56,19 +57,18 @@ class Main2Activity : BaseMvvmActivity<MainViewModel>() {
     }
 
 
-
     override fun initView() {
         LogUtils.e("initView")
-//        if (supportFragmentManager.fragments.size == 0) {
-//            val f1 = Main2Fragment()
-//            val f2 = Main2Fragment()
-//            LogUtils.e("initView")
-//            supportFragmentManager.beginTransaction()
-//                    .add(R.id.fragment, f1)
-////                .add(R.id.fragment, f2)
-//
-//                    .commit()
-//        }
+        if (supportFragmentManager.fragments.size == 0) {
+            val f1 = Main2Fragment()
+            val f2 = Main2Fragment()
+            LogUtils.e("initView")
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment, f1)
+//                .add(R.id.fragment, f2)
+
+                .commit()
+        }
     }
 
     override fun parseIntent(intent: Intent) {

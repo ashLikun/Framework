@@ -28,6 +28,12 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     //请求CODE
     open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
 
+    //是否懒加载,
+    open var isLazy = false
+
+    //懒加载是否完成
+    private var isLazyOk = false
+
     //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常
     //标记是否与宿主断开，就是宿主是否销毁（准备开始重建）
     internal var isDestroy = false
@@ -111,6 +117,25 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
 
     open fun showRetry(contextData: ContextData) {
         showRetry.value = contextData
+    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        onLazyCreate()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isLazy && !isLazyOk) {
+            onLazyCreate()
+        }
+    }
+
+    /**
+     * 懒加载的回调
+     */
+    open fun onLazyCreate() {
+        isLazyOk = true
     }
 
     override fun onDestroy() {
