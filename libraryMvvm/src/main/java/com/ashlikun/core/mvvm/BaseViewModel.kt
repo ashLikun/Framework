@@ -121,7 +121,9 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        onLazyCreate()
+        if (!isLazy) {
+            onLazyCreate()
+        }
     }
 
     override fun onResume() {
@@ -131,6 +133,7 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
             onLazyCreate()
         }
     }
+
     /**
      * 懒加载的回调
      */
