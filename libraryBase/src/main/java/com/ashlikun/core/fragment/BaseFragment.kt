@@ -166,13 +166,13 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
             }
             //添加到中间布局
             parent?.addView(rootView)
+            isLazyOk = true
             onMyCreated()
         }
         super.onResume()
     }
 
     private fun onMyCreated() {
-        isLazyOk = true
         if (!isRecycle) {
             baseInitView()
             initView()

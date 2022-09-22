@@ -127,15 +127,15 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     override fun onResume() {
         super.onResume()
         if (isLazy && !isLazyOk) {
+            isLazyOk = true
             onLazyCreate()
         }
     }
-
     /**
      * 懒加载的回调
      */
     open fun onLazyCreate() {
-        isLazyOk = true
+
     }
 
     override fun onDestroy() {
