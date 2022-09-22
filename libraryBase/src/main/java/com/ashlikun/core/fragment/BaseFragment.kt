@@ -71,7 +71,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     open protected val isLazy = false
 
     //懒加载是否完成
-    private var isLazyOk = false
+    protected var isLazyOk = false
 
     //宿主activity
     open val requireActivity: FragmentActivity
@@ -166,13 +166,13 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
             }
             //添加到中间布局
             parent?.addView(rootView)
-            isLazyOk = true
             onMyCreated()
         }
         super.onResume()
     }
 
     private fun onMyCreated() {
+        isLazyOk = true
         if (!isRecycle) {
             baseInitView()
             initView()
