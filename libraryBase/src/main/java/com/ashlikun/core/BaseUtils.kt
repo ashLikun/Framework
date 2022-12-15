@@ -13,6 +13,8 @@ import com.ashlikun.core.listener.IBaseWindow
 import com.ashlikun.loadswitch.DefaultOnLoadLayoutListener
 import com.ashlikun.loadswitch.OnLoadLayoutListener
 import com.ashlikun.loadswitch.OnLoadSwitchClick
+import com.ashlikun.utils.other.coroutines.defaultCoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineExceptionHandler
 import java.lang.reflect.*
 import kotlin.coroutines.CoroutineContext
 
@@ -59,8 +61,10 @@ object BaseUtils {
      * CoroutineExceptionHandler { _, t ->
      * t.printStackTrace()
      * }
+     * 如果不设置就会调用工具类的defaultCoroutineExceptionHandler
      */
-    var coroutineExceptionHandler: CoroutineContext? = null
+    var coroutineExceptionHandler: CoroutineExceptionHandler? = null
+        get() = field ?: defaultCoroutineExceptionHandler
 
 
     /**

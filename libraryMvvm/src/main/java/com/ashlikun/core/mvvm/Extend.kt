@@ -5,10 +5,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.ashlikun.core.BaseUtils
 import com.ashlikun.core.activity.BaseActivity
-import com.ashlikun.utils.other.coroutines.IODispatcher
-import com.ashlikun.utils.other.coroutines.IoScope
-import com.ashlikun.utils.other.coroutines.ThreadPoolDispatcher
+import com.ashlikun.utils.other.coroutines.*
 import com.ashlikun.utils.ui.ActivityManager
+import com.ashlikun.utils.ui.extend.lifecycle
+import com.ashlikun.utils.ui.fCActivity
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -20,10 +20,13 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 inline fun ViewModel.launch(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return viewModelScope.launch(checkCoroutineExceptionHandler(context)) {
+    return viewModelScope.launch(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2, exception3 = cache3)) {
         delay(delayTime)
         job()
     }
@@ -34,10 +37,20 @@ inline fun ViewModel.launch(
  */
 inline fun ViewModel.launchIO(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return viewModelScope.launch(checkCoroutineExceptionHandler(IODispatcher + context)) {
+    return viewModelScope.launch(
+        checkCoroutineExceptionHandler(
+            IODispatcher + context,
+            exception = cache,
+            exception2 = cache2,
+            exception3 = cache3
+        )
+    ) {
         delay(delayTime)
         job()
     }
@@ -48,10 +61,20 @@ inline fun ViewModel.launchIO(
  */
 inline fun ViewModel.launchThreadPoll(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return viewModelScope.launch(checkCoroutineExceptionHandler(ThreadPoolDispatcher + context)) {
+    return viewModelScope.launch(
+        checkCoroutineExceptionHandler(
+            ThreadPoolDispatcher + context,
+            exception = cache,
+            exception2 = cache2,
+            exception3 = cache3
+        )
+    ) {
         delay(delayTime)
         job()
     }
@@ -64,10 +87,13 @@ inline fun ViewModel.launchThreadPoll(
  */
 inline fun <T> ViewModel.async(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> T
 ): Deferred<T> {
-    return viewModelScope.async(checkCoroutineExceptionHandler(context)) {
+    return viewModelScope.async(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2, exception3 = cache3)) {
         delay(delayTime)
         job()
     }
@@ -79,10 +105,13 @@ inline fun <T> ViewModel.async(
  */
 inline fun LifecycleOwner.launch(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return lifecycleScope.launch(checkCoroutineExceptionHandler(context)) {
+    return lifecycleScope.launch(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2, exception3 = cache3)) {
         delay(delayTime)
         job()
     }
@@ -93,10 +122,20 @@ inline fun LifecycleOwner.launch(
  */
 inline fun LifecycleOwner.launchIO(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return lifecycleScope.launch(checkCoroutineExceptionHandler(IODispatcher + context)) {
+    return lifecycleScope.launch(
+        checkCoroutineExceptionHandler(
+            IODispatcher + context,
+            exception = cache,
+            exception2 = cache2,
+            exception3 = cache3
+        )
+    ) {
         delay(delayTime)
         job()
     }
@@ -107,10 +146,20 @@ inline fun LifecycleOwner.launchIO(
  */
 inline fun LifecycleOwner.launchThreadPoll(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return lifecycleScope.launch(checkCoroutineExceptionHandler(ThreadPoolDispatcher + context)) {
+    return lifecycleScope.launch(
+        checkCoroutineExceptionHandler(
+            ThreadPoolDispatcher + context,
+            exception = cache,
+            exception2 = cache2,
+            exception3 = cache3
+        )
+    ) {
         delay(delayTime)
         job()
     }
@@ -123,10 +172,13 @@ inline fun LifecycleOwner.launchThreadPoll(
  */
 inline fun <T> LifecycleOwner.async(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> T
 ): Deferred<T> {
-    return lifecycleScope.async(checkCoroutineExceptionHandler(context)) {
+    return lifecycleScope.async(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2, exception3 = cache3)) {
         delay(delayTime)
         job()
     }
@@ -138,27 +190,42 @@ inline fun <T> LifecycleOwner.async(
  */
 inline fun View.launch(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
-) = findViewTreeLifecycleOwner()!!.launch(context, delayTime, job)
+) = lifecycle {
+    it.launch(context, cache, cache2, cache3, delayTime, job)
+}
 
 /**
  * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
  */
 inline fun View.launchIO(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
-) = findViewTreeLifecycleOwner()!!.launchIO(context, delayTime, job)
+) = lifecycle {
+    it.launchIO(context, cache, cache2, cache3, delayTime, job)
+}
 
 /**
  * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
  */
 inline fun View.launchThreadPoll(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
-) = findViewTreeLifecycleOwner()!!.launchThreadPoll(context, delayTime, job)
+) = lifecycle {
+    it.launchThreadPoll(context, cache, cache2, cache3, delayTime, job)
+}
 
 /**
  * 异步执行，常用于最外层
@@ -167,23 +234,82 @@ inline fun View.launchThreadPoll(
  */
 inline fun <T> View.async(
     context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> T
-) = findViewTreeLifecycleOwner()!!.async(context, delayTime, job)
+) = lifecycle {
+    it.async(context, cache, cache2, cache3, delayTime, job)
+}
 
-inline fun checkCoroutineExceptionHandler(context: CoroutineContext): CoroutineContext {
+/**
+ * 执行，常用于最外层,主线程Dispatchers.Main
+ * 无阻塞的
+ */
+inline fun activityLaunch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = fCActivity?.launch(context, cache, cache2, cache3, delayTime, job)
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun activityLaunchIO(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = fCActivity?.launchIO(context, cache, cache2, cache3, delayTime, job)
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ */
+inline fun activityLaunchThreadPoll(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = fCActivity?.launchThreadPoll(context, cache, cache2, cache3, delayTime, job)
+
+/**
+ * 异步执行，常用于最外层
+ * 多个 async 任务是并行的
+ * 特点带返回值 async 返回的是一个Deferred<T>，需要调用其await()方法获取结果。
+ */
+inline fun <T> activityAsync(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline cache3: (() -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> T
+) = fCActivity?.async(context, cache, cache2, cache3, delayTime, job)
+
+inline fun checkCoroutineExceptionHandler(
+    context: CoroutineContext,
+    isAddDefault: Boolean = true,
+    noinline exception: ((Throwable) -> Unit)? = null,
+    noinline exception2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    noinline exception3: (() -> Unit)? = null
+): CoroutineContext {
     var ct = context
-//    if (context[CoroutineExceptionHandler.Key] == null) {
-//    CoroutineExceptionHandler { _, t ->
-//        t.printStackTrace()
-//    }
-    //如果沒有处理错误的时候
-    if (context[CoroutineExceptionHandler.Key] == null) {
-        if (BaseUtils.coroutineExceptionHandler != null && BaseUtils.coroutineExceptionHandler is CoroutineExceptionHandler) {
-            ct = context + BaseUtils.coroutineExceptionHandler as CoroutineExceptionHandler
+    if (exception != null) ct = context + CException(exception)
+    if (exception2 != null) ct = context + CException(exception2)
+    if (exception3 != null) ct = context + CException(exception3)
+    if (isAddDefault && context[CoroutineExceptionHandler.Key] == null) {
+        if (BaseUtils.coroutineExceptionHandler != null) {
+            ct = context + defaultCoroutineExceptionHandler
         }
     }
-//    }
     return ct
 }
 
