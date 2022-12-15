@@ -13,6 +13,7 @@ import com.ashlikun.utils.other.coroutines.IODispatcher
 import com.ashlikun.utils.other.coroutines.ThreadPoolDispatcher
 import com.ashlikun.utils.ui.ActivityManager
 import com.ashlikun.utils.ui.extend.lifecycle
+import com.ashlikun.utils.ui.extend.toLifecycle
 import com.ashlikun.utils.ui.fCActivity
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -187,9 +188,7 @@ inline fun View.launch(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
-) = lifecycle {
-    it.launch(context, cache, cache2, delayTime, job)
-}
+) = toLifecycle().launch(context, cache, cache2, delayTime, job)
 
 /**
  * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
@@ -200,9 +199,7 @@ inline fun View.launchIO(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
-) = lifecycle {
-    it.launchIO(context, cache, cache2, delayTime, job)
-}
+) = toLifecycle().launchIO(context, cache, cache2, delayTime, job)
 
 /**
  * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
@@ -213,9 +210,7 @@ inline fun View.launchThreadPoll(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
-) = lifecycle {
-    it.launchThreadPoll(context, cache, cache2, delayTime, job)
-}
+) = toLifecycle().launchThreadPoll(context, cache, cache2, delayTime, job)
 
 /**
  * 异步执行，常用于最外层
@@ -228,8 +223,77 @@ inline fun <T> View.async(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline job: suspend () -> T
+) = toLifecycle().async(context, cache, cache2, delayTime, job)
+
+/**
+ * 执行，常用于最外层,主线程Dispatchers.Main
+ * 无阻塞的
+ * 自动等待Lifecycle
+ * @param onStart 执行返回的Job
+ */
+inline fun View.launchLifecycle(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline onStart: ((Job) -> Unit)? = null,
+    noinline job: suspend () -> Unit
 ) = lifecycle {
-    it.async(context, cache, cache2, delayTime, job)
+    val jobR = it.launch(context, cache, cache2, delayTime, job)
+    onStart?.invoke(jobR)
+}
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ * 自动等待Lifecycle
+ * @param onStart 执行返回的Job
+ */
+inline fun View.launchIOLifecycle(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline onStart: ((Job) -> Unit)? = null,
+    noinline job: suspend () -> Unit
+) = lifecycle {
+    val jobR = it.launchIO(context, cache, cache2, delayTime, job)
+    onStart?.invoke(jobR)
+}
+
+/**
+ * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
+ * 自动等待Lifecycle
+ * @param onStart 执行返回的Job
+ */
+inline fun View.launchThreadPollLifecycle(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline onStart: ((Job) -> Unit)? = null,
+    noinline job: suspend () -> Unit
+) = lifecycle {
+    val jobR = it.launchThreadPoll(context, cache, cache2, delayTime, job)
+    onStart?.invoke(jobR)
+}
+
+/**
+ * 异步执行，常用于最外层
+ * 多个 async 任务是并行的
+ * 特点带返回值 async 返回的是一个Deferred<T>，需要调用其await()方法获取结果。
+ * 自动等待Lifecycle
+ * @param onStart 执行返回的Job
+ */
+inline fun <T> View.asyncLifecycle(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline onStart: ((Job) -> Unit)? = null,
+    noinline job: suspend () -> T
+) = lifecycle {
+    val jobR = it.async(context, cache, cache2, delayTime, job)
+    onStart?.invoke(jobR)
 }
 
 /**
