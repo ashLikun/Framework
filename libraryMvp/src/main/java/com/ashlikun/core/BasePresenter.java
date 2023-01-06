@@ -12,7 +12,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 
 import com.ashlikun.core.iview.IBaseView;
 import com.ashlikun.core.listener.OnDispatcherMessage;
-import com.ashlikun.okhttputils.http.OkHttpUtils;
+import com.ashlikun.okhttputils.http.OkHttpManage;
 import com.ashlikun.utils.main.ActivityUtils;
 
 import java.lang.ref.WeakReference;
@@ -159,7 +159,7 @@ public abstract class BasePresenter<T extends IBaseView> implements LifecycleObs
      * 销毁网络访问
      */
     public void cancelAllHttp() {
-        OkHttpUtils.Companion.get().cancelTag(this);
+        OkHttpManage.Companion.get().cancelTag(this);
     }
 
     /**

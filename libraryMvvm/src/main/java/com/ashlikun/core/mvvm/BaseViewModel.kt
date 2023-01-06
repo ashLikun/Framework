@@ -8,7 +8,7 @@ import androidx.lifecycle.*
 import com.ashlikun.core.listener.OnDispatcherMessage
 import com.ashlikun.loadswitch.ContextData
 import com.ashlikun.loadswitch.LoadSwitchService
-import com.ashlikun.okhttputils.http.OkHttpUtils
+import com.ashlikun.okhttputils.http.OkHttpManage
 import com.ashlikun.utils.main.ActivityUtils
 import com.ashlikun.utils.ui.ActivityManager
 import java.lang.NullPointerException
@@ -205,7 +205,7 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
      * 销毁网络访问
      */
     open fun cancelAllHttp() {
-        OkHttpUtils.get().cancelTag(this)
+        OkHttpManage.cancelTag(this)
     }
 
     /**

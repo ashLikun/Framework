@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.BaseUtils
-import com.ashlikun.okhttputils.http.OkHttpUtils
+import com.ashlikun.okhttputils.http.OkHttpManage
 import com.ashlikun.orm.LiteOrmUtil
 import com.ashlikun.utils.AppUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -24,7 +24,7 @@ class MyApp : MultiDexApplication() {
         AppUtils.init(this)
         ARouter.init(this)
         LiteOrmUtil.init(this)
-        OkHttpUtils.init(this, null)
+        OkHttpManage.init(this, null)
         BaseUtils.coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Log.e("MyApp", "coroutineExceptionHandler")
             t.printStackTrace()

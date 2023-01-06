@@ -20,7 +20,7 @@ import com.ashlikun.core.listener.OnDispatcherMessage
 import com.ashlikun.loadswitch.ContextData
 import com.ashlikun.loadswitch.LoadSwitch
 import com.ashlikun.loadswitch.LoadSwitchService
-import com.ashlikun.okhttputils.http.OkHttpUtils
+import com.ashlikun.okhttputils.http.OkHttpManage
 import com.ashlikun.supertoobar.SuperToolBar
 import com.ashlikun.utils.ui.UiUtils
 import com.ashlikun.utils.ui.status.StatusBarCompat
@@ -251,7 +251,7 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
      * 销毁网络访问
      */
     override fun cancelAllHttp() {
-        OkHttpUtils.get().cancelTag(this)
+        OkHttpManage.cancelTag(this)
     }
 
     /**
