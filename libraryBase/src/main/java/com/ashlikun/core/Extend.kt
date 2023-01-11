@@ -9,10 +9,15 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.ashlikun.utils.other.ClassUtils
+import com.ashlikun.utils.other.MainHandle
 import com.ashlikun.utils.ui.extend.hineIme
 import com.ashlikun.utils.ui.extend.showIme
 import com.ashlikun.utils.ui.status.StatusBarCompat
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -49,9 +54,26 @@ var Activity.windowBrightness
 /**
  * 防止activity退出的时候动画重叠
  */
-fun Activity.finishNoAnim() {
-    overridePendingTransition(0, 0)
-    finish()
+fun Activity.finishNoAnim(delay: Long = 0, call: (() -> Unit)? = null) {
+    fun run() {
+        overridePendingTransition(0, 0)
+        finish()
+        call?.invoke()
+    }
+    if (delay > 0) {
+        if (this is LifecycleOwner) {
+            lifecycleScope.launch {
+                run()
+                call?.invoke()
+            }
+        } else {
+            MainHandle.get().postDelayed(delayMillis = delay) {
+                run()
+            }
+        }
+    } else {
+        run()
+    }
 }
 
 val atomicInteger = AtomicInteger()
