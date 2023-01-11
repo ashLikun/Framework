@@ -26,7 +26,9 @@ import kotlin.reflect.KClass
 open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     SimpleLifecycleObserver {
     //请求CODE
-    open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
+    open val REQUEST_CODE  by lazy {
+        abs(this.javaClass.simpleName.hashCode() % 60000)
+    }
 
     //是否懒加载,
     open var isLazy = false

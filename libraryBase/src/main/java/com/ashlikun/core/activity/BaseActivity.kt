@@ -60,8 +60,9 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         get() = this
 
     //请求CODE
-    open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
-
+    open val REQUEST_CODE  by lazy {
+        abs(this.javaClass.simpleName.hashCode() % 60000)
+    }
     //toolbar
     open val toolbar: SuperToolBar? by lazy {
         f(R.id.toolbar)

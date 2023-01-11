@@ -39,7 +39,9 @@ import kotlin.math.abs
  */
 abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
     //请求CODE
-    open var REQUEST_CODE = abs(this.javaClass.simpleName.hashCode() % 60000)
+    open val REQUEST_CODE by lazy {
+        abs(this.javaClass.simpleName.hashCode() % 60000)
+    }
     private val activityResultCalls: MutableMap<Int, (ActivityResult) -> Unit> by lazy {
         mutableMapOf()
     }
