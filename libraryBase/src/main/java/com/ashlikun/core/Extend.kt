@@ -63,8 +63,8 @@ fun Activity.finishNoAnim(delay: Long = 0, call: (() -> Unit)? = null) {
     if (delay > 0) {
         if (this is LifecycleOwner) {
             lifecycleScope.launch {
+                delay(delay)
                 run()
-                call?.invoke()
             }
         } else {
             MainHandle.get().postDelayed(delayMillis = delay) {
