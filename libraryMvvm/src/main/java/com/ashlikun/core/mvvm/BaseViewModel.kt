@@ -75,25 +75,11 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
         MutableLiveData<String>()
     }
 
-    //显示加载布局
-    internal val showLoading: MutableLiveData<ContextData> by lazy {
-        MutableLiveData<ContextData>()
+    //ui状态
+    internal val uiStatus: MutableLiveData<Pair<Int, ContextData?>> by lazy {
+        MutableLiveData<Pair<Int, ContextData?>>()
     }
 
-    //显示重新加载页面
-    internal val showRetry: MutableLiveData<ContextData> by lazy {
-        MutableLiveData<ContextData>()
-    }
-
-    //显示内容
-    internal val showContent: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
-
-    //显示空页面
-    internal val showEmpty: MutableLiveData<ContextData> by lazy {
-        MutableLiveData<ContextData>()
-    }
 
     open fun clearData() {
         clearData.value = ""
@@ -103,20 +89,27 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
         finish.value = ""
     }
 
-    open fun showLoading(contextData: ContextData) {
-        showLoading.value = contextData
+    /**
+     * @param isForce 是否强制一定显示
+     */
+    open fun showLoading(contextData: ContextData, isForce: Boolean = false) {
+        if (isForce) {
+            uiStatus.value = Pair(0, contextData)
+        } else {
+            uiStatus.value = Pair(1, contextData)
+        }
     }
 
     open fun showContent(str: String = "") {
-        showContent.value = str
+        uiStatus.value = Pair(3, null)
     }
 
     open fun showEmpty(contextData: ContextData) {
-        showEmpty.value = contextData
+        uiStatus.value = Pair(2, contextData)
     }
 
     open fun showRetry(contextData: ContextData) {
-        showRetry.value = contextData
+        uiStatus.value = Pair(4, contextData)
     }
 
     override fun onCreate(owner: LifecycleOwner) {

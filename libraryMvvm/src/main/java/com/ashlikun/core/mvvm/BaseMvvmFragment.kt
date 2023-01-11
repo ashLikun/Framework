@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.ashlikun.core.fragment.BaseFragment
+import com.ashlikun.loadswitch.ContextData
 
 
 /**
@@ -126,21 +127,16 @@ open abstract class BaseMvvmFragment<VM : BaseViewModel>
         vm.finish.observe(this) {
             finish()
         }
-        //显示加载布局
-        vm.showLoading.observe(this) {
-            showLoading(it)
-        }
-        //显示重新加载页面
-        vm.showRetry.observe(this) {
-            showRetry(it)
-        }
-        //显示空页面
-        vm.showEmpty.observe(this) {
-            showEmpty(it)
-        }
-        //显示内容
-        vm.showContent.observe(this) {
-            showContent()
+
+        //显示UI状态
+        vm.uiStatus.observe(this) {
+            when (it.first) {
+                0 -> showLoading(it.second ?: ContextData(), true)
+                1 -> showLoading(it.second ?: ContextData())
+                2 -> showEmpty(it.second ?: ContextData())
+                3 -> showContent()
+                4 -> showRetry(it.second ?: ContextData())
+            }
         }
     }
 

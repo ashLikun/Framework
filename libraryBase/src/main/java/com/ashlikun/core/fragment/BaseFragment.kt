@@ -225,7 +225,10 @@ abstract class BaseFragment : Fragment(), IBaseWindow, OnDispatcherMessage {
         activityResultCalls.clear()
     }
 
-    override fun showLoading(data: ContextData) {
+    override fun showLoading(data: ContextData, isForce: Boolean) {
+        if (isForce) {
+            switchService?.isLoadingCanShow = true
+        }
         switchService?.showLoading(data)
     }
 

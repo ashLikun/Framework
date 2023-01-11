@@ -259,7 +259,10 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     }
 
 
-    override fun showLoading(data: ContextData) {
+    override fun showLoading(data: ContextData, isForce: Boolean) {
+        if (isForce) {
+            switchService?.isLoadingCanShow = true
+        }
         switchService?.showLoading(data)
     }
 

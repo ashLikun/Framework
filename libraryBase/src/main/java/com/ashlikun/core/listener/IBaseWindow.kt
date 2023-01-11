@@ -74,8 +74,9 @@ interface IBaseWindow : OnLoadSwitchClick {
      * 显示加载中布局
      *
      * @param data
+     *  @param isForce 是否强制一定显示
      */
-    fun showLoading(data: ContextData)
+    fun showLoading(data: ContextData, isForce: Boolean = false)
 
     /**
      * 初始化布局切换的管理器
