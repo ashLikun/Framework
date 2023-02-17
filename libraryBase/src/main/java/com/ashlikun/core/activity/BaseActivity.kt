@@ -39,6 +39,9 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     private val activityResultCalls: MutableMap<Int, (ActivityResult) -> Unit> by lazy {
         mutableMapOf()
     }
+    open val thisMy by lazy {
+        this
+    }
 
     /**
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
@@ -60,9 +63,10 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         get() = this
 
     //请求CODE
-    open val REQUEST_CODE  by lazy {
+    open val REQUEST_CODE by lazy {
         abs(this.javaClass.simpleName.hashCode() % 60000)
     }
+
     //toolbar
     open val toolbar: SuperToolBar? by lazy {
         f(R.id.toolbar)
