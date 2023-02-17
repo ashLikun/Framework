@@ -29,7 +29,7 @@ inline fun ViewModel.launch(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ): Job {
     return viewModelScope.launch(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)) {
         delay(delayTime)
@@ -45,7 +45,7 @@ inline fun ViewModel.launchIO(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ): Job {
     return viewModelScope.launch(
         checkCoroutineExceptionHandler(
@@ -67,7 +67,7 @@ inline fun ViewModel.launchThreadPoll(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ): Job {
     return viewModelScope.launch(
         checkCoroutineExceptionHandler(
@@ -91,11 +91,17 @@ inline fun <T> ViewModel.async(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> T
+    noinline job: suspend CoroutineScope.() -> T
 ): Deferred<T> {
-    return viewModelScope.async(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)) {
+    val handleContext = checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)
+    return viewModelScope.async(handleContext) {
         delay(delayTime)
-        job()
+        //自己实现异常，防止根异常无法捕获
+        runCatching {
+            job()
+        }.onFailure {
+            if (handleContext is CoroutineExceptionHandler) handleContext.handleException(coroutineContext, it)
+        }.getOrNull()!!
     }
 }
 
@@ -108,7 +114,7 @@ inline fun LifecycleOwner.launch(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ): Job {
     return lifecycleScope.launch(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)) {
         delay(delayTime)
@@ -124,7 +130,7 @@ inline fun LifecycleOwner.launchIO(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ): Job {
     return lifecycleScope.launch(
         checkCoroutineExceptionHandler(
@@ -146,7 +152,7 @@ inline fun LifecycleOwner.launchThreadPoll(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ): Job {
     return lifecycleScope.launch(
         checkCoroutineExceptionHandler(
@@ -170,11 +176,17 @@ inline fun <T> LifecycleOwner.async(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> T
+    noinline job: suspend CoroutineScope.() -> T
 ): Deferred<T> {
-    return lifecycleScope.async(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)) {
+    val handleContext = checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)
+    return lifecycleScope.async(handleContext) {
         delay(delayTime)
-        job()
+        //自己实现异常，防止根异常无法捕获
+        runCatching {
+            job()
+        }.onFailure {
+            if (handleContext is CoroutineExceptionHandler) handleContext.handleException(coroutineContext, it)
+        }.getOrNull()!!
     }
 }
 
@@ -187,7 +199,7 @@ inline fun View.launch(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = toLifecycle().launch(context, cache, cache2, delayTime, job)
 
 /**
@@ -198,7 +210,7 @@ inline fun View.launchIO(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = toLifecycle().launchIO(context, cache, cache2, delayTime, job)
 
 /**
@@ -209,7 +221,7 @@ inline fun View.launchThreadPoll(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = toLifecycle().launchThreadPoll(context, cache, cache2, delayTime, job)
 
 /**
@@ -222,7 +234,7 @@ inline fun <T> View.async(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> T
+    noinline job: suspend CoroutineScope.() -> T
 ) = toLifecycle().async(context, cache, cache2, delayTime, job)
 
 /**
@@ -237,7 +249,7 @@ inline fun View.launchLifecycle(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline onStart: ((Job) -> Unit)? = null,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = lifecycle {
     val jobR = it.launch(context, cache, cache2, delayTime, job)
     onStart?.invoke(jobR)
@@ -254,7 +266,7 @@ inline fun View.launchIOLifecycle(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline onStart: ((Job) -> Unit)? = null,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = lifecycle {
     val jobR = it.launchIO(context, cache, cache2, delayTime, job)
     onStart?.invoke(jobR)
@@ -271,7 +283,7 @@ inline fun View.launchThreadPollLifecycle(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline onStart: ((Job) -> Unit)? = null,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = lifecycle {
     val jobR = it.launchThreadPoll(context, cache, cache2, delayTime, job)
     onStart?.invoke(jobR)
@@ -290,7 +302,7 @@ inline fun <T> View.asyncLifecycle(
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
     noinline onStart: ((Job) -> Unit)? = null,
-    noinline job: suspend () -> T
+    noinline job: suspend CoroutineScope.() -> T
 ) = lifecycle {
     val jobR = it.async(context, cache, cache2, delayTime, job)
     onStart?.invoke(jobR)
@@ -305,7 +317,7 @@ inline fun activityLaunch(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = fCActivity?.launch(context, cache, cache2, delayTime, job)
 
 /**
@@ -316,7 +328,7 @@ inline fun activityLaunchIO(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = fCActivity?.launchIO(context, cache, cache2, delayTime, job)
 
 /**
@@ -327,7 +339,7 @@ inline fun activityLaunchThreadPoll(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> Unit
+    noinline job: suspend CoroutineScope.() -> Unit
 ) = fCActivity?.launchThreadPoll(context, cache, cache2, delayTime, job)
 
 /**
@@ -340,7 +352,7 @@ inline fun <T> activityAsync(
     noinline cache: ((Throwable) -> Unit)? = null,
     noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
     delayTime: Long = 0,
-    noinline job: suspend () -> T
+    noinline job: suspend CoroutineScope.() -> T
 ) = fCActivity?.async(context, cache, cache2, delayTime, job)
 
 inline fun checkCoroutineExceptionHandler(
