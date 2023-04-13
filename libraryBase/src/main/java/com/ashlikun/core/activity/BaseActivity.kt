@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
@@ -48,7 +49,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      */
     protected open val myResources: Resources by lazy {
         var result = super.getResources()
-        BaseUtils.onActivityGetResources.forEach {
+        BaseUtils.activityGetResources?.forEach {
             result = it(result)
         }
         result
@@ -95,7 +96,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     var baseContextIsChang = false
     override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
         var newConfiguration = overrideConfiguration
-        BaseUtils.onApplyOverrideConfiguration.forEach {
+        BaseUtils.applyOverrideConfiguration?.forEach {
             newConfiguration = it(newConfiguration)
         }
         super.applyOverrideConfiguration(newConfiguration)
@@ -103,7 +104,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
 
     override fun attachBaseContext(newBase: Context) {
         var newContext = newBase
-        BaseUtils.onAttachBaseContext.forEach {
+        BaseUtils.attachBaseContext?.forEach {
             newContext = it(newContext)
             baseContextIsChang = newContext != newBase
         }
@@ -112,7 +113,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseUtils.onActivityPreCreated.forEach {
+        BaseUtils.activityPreCreated?.forEach {
             it(this, savedInstanceState)
         }
         BugUtils.orientationBug8_0(this)
@@ -336,5 +337,19 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultCalls[requestCode]?.invoke(ActivityResult(requestCode, data))
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        BaseUtils.userInteraction?.forEach {
+            it(this)
+        }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        BaseUtils.dispatchTouchEvent?.forEach {
+            if (it(this, ev)) return true
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }

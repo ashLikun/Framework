@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
@@ -29,22 +30,62 @@ object BaseUtils {
     /**
      * Activity onCreate创建之前
      */
-    val onActivityPreCreated = mutableListOf<((activity: Activity, savedInstanceState: Bundle?) -> Unit)>()
+    internal var activityPreCreated: MutableList<((activity: Activity, savedInstanceState: Bundle?) -> Unit)>? = null
+    val onActivityPreCreated
+        get() = if (activityPreCreated == null) {
+            activityPreCreated = mutableListOf()
+            activityPreCreated!!
+        } else activityPreCreated!!
 
     /**
      * Activity onAttachBaseContext
      */
-    val onAttachBaseContext = mutableListOf<((context: Context) -> Context)>()
+    internal var attachBaseContext: MutableList<((context: Context) -> Context)>? = null
+    val onAttachBaseContext
+        get() = if (attachBaseContext == null) {
+            attachBaseContext = mutableListOf()
+            attachBaseContext!!
+        } else attachBaseContext!!
 
     /**
      * Activity applyOverrideConfiguration
      */
-    val onApplyOverrideConfiguration = mutableListOf<((configuration: Configuration) -> Configuration)>()
+    internal var applyOverrideConfiguration: MutableList<((configuration: Configuration) -> Configuration)>? = null
+    val onApplyOverrideConfiguration
+        get() = if (applyOverrideConfiguration == null) {
+            applyOverrideConfiguration = mutableListOf()
+            applyOverrideConfiguration!!
+        } else applyOverrideConfiguration!!
 
     /**
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
      */
-    var onActivityGetResources = mutableListOf<((result: Resources) -> Resources)>()
+    internal var activityGetResources: MutableList<((result: Resources) -> Resources)>? = null
+    val onActivityGetResources
+        get() = if (activityGetResources == null) {
+            activityGetResources = mutableListOf()
+            activityGetResources!!
+        } else activityGetResources!!
+
+    /**
+     * 全局当Activity回调 onUserInteraction 方法时候
+     */
+    internal var userInteraction: MutableList<((activity: Activity) -> Unit)>? = null
+    val onUserInteraction
+        get() = if (userInteraction == null) {
+            userInteraction = mutableListOf()
+            userInteraction!!
+        } else userInteraction!!
+
+    /**
+     * 全局当Activity回调 dispatchTouchEvent 方法时候
+     */
+    internal var dispatchTouchEvent: MutableList<((activity: Activity, ev: MotionEvent) -> Boolean)>? = null
+    val onDispatchTouchEvent
+        get() = if (dispatchTouchEvent == null) {
+            dispatchTouchEvent = mutableListOf()
+            dispatchTouchEvent!!
+        } else dispatchTouchEvent!!
 
     /**
      * 布局切换的布局渲染事件,必须有双参数构造方法
