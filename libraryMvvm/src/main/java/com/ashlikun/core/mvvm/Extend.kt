@@ -101,7 +101,7 @@ inline fun <T> ViewModel.async(
             job()
         }.onFailure {
             if (handleContext is CoroutineExceptionHandler) handleContext.handleException(coroutineContext, it)
-        }.getOrNull()!!
+        }.getOrNull() as T
     }
 }
 
@@ -186,7 +186,7 @@ inline fun <T> LifecycleOwner.async(
             job()
         }.onFailure {
             if (handleContext is CoroutineExceptionHandler) handleContext.handleException(coroutineContext, it)
-        }.getOrNull()!!
+        }.getOrNull() as T
     }
 }
 
