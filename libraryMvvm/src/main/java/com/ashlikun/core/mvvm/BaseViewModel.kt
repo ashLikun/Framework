@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.CallSuper
 import androidx.lifecycle.*
 import com.ashlikun.core.listener.OnDispatcherMessage
 import com.ashlikun.loadswitch.ContextData
@@ -53,7 +54,8 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     var lifecycleOwner: LifecycleOwner? = null
 
     val requireLife: LifecycleOwner
-        get() = lifecycleOwner ?: throw NullPointerException(this::class.java.name + "lifecycleOwner is Null")
+        get() = lifecycleOwner
+            ?: throw NullPointerException(this::class.java.name + "lifecycleOwner is Null")
 
     //这几个是和对宿主的引用，这里得额外处理,防止内存泄漏和null指针异常 结束
 
@@ -64,6 +66,14 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
 
     //数据是否初始化过
     var dataInit = false
+
+    //页面的意图
+    var intent: Intent? = null
+        private set
+
+    //页面的意图
+    val arguments: Bundle?
+        get() = intent?.extras
 
     //清空数据
     internal val clearData: MutableLiveData<String> by lazy {
@@ -149,8 +159,9 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     /**
      * 解析意图数据
      */
+    @CallSuper
     open fun parseIntent(intent: Intent) {
-
+        this.intent = intent
     }
 
     /**
