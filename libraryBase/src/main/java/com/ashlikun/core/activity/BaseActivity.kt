@@ -203,9 +203,8 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
      * ：解析意图
      */
     protected open fun parseIntent(intent: Intent) {
-        try {
+        runCatching {
             ARouter.getInstance().inject(this)
-        } catch (e: Exception) {
         }
     }
 

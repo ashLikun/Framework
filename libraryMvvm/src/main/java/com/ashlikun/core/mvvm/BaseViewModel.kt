@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
+import com.alibaba.android.arouter.launcher.ARouter
 import com.ashlikun.core.listener.OnDispatcherMessage
 import com.ashlikun.loadswitch.ContextData
 import com.ashlikun.loadswitch.LoadSwitchService
@@ -162,6 +163,9 @@ open abstract class BaseViewModel : ViewModel(), OnDispatcherMessage,
     @CallSuper
     open fun parseIntent(intent: Intent) {
         this.intent = intent
+        runCatching {
+            ARouter.getInstance().inject(this)
+        }
     }
 
     /**
