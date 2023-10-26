@@ -21,7 +21,7 @@ class MyApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         AppUtils.isDebug = true
-        AppUtils.init(this)
+        AppUtils.init(this, "Base")
         ARouter.init(this)
         LiteOrmUtil.init(this)
         OkHttpManage.init(this, null)
