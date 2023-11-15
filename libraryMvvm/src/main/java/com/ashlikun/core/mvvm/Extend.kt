@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.ashlikun.core.BaseUtils
 import com.ashlikun.core.activity.BaseActivity
 import com.ashlikun.utils.other.coroutines.CException
+import com.ashlikun.utils.other.coroutines.DefaultDispatcher
 import com.ashlikun.utils.other.coroutines.IODispatcher
 import com.ashlikun.utils.other.coroutines.ThreadPoolDispatcher
 import com.ashlikun.utils.ui.ActivityManager
@@ -31,7 +32,35 @@ inline fun ViewModel.launch(
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return viewModelScope.launch(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)) {
+    return viewModelScope.launch(
+        checkCoroutineExceptionHandler(
+            context,
+            exception = cache,
+            exception2 = cache2
+        )
+    ) {
+        delay(delayTime)
+        job()
+    }
+}
+
+/**
+ * 执行，在DefaultDispatcher 线程中执行，可以用于最外层 Dispatchers.Defaultr 线程 无阻塞的
+ */
+inline fun ViewModel.launchDefault(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+): Job {
+    return viewModelScope.launch(
+        checkCoroutineExceptionHandler(
+            DefaultDispatcher + context,
+            exception = cache,
+            exception2 = cache2,
+        )
+    ) {
         delay(delayTime)
         job()
     }
@@ -93,14 +122,18 @@ inline fun <T> ViewModel.async(
     delayTime: Long = 0,
     noinline job: suspend () -> T
 ): Deferred<T> {
-    val handleContext = checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)
+    val handleContext =
+        checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)
     return viewModelScope.async(handleContext) {
         delay(delayTime)
         //自己实现异常，防止根异常无法捕获
         runCatching {
             job()
         }.onFailure {
-            if (handleContext is CoroutineExceptionHandler) handleContext.handleException(coroutineContext, it)
+            if (handleContext is CoroutineExceptionHandler) handleContext.handleException(
+                coroutineContext,
+                it
+            )
         }.getOrNull() as T
     }
 }
@@ -116,7 +149,35 @@ inline fun LifecycleOwner.launch(
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ): Job {
-    return lifecycleScope.launch(checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)) {
+    return lifecycleScope.launch(
+        checkCoroutineExceptionHandler(
+            context,
+            exception = cache,
+            exception2 = cache2
+        )
+    ) {
+        delay(delayTime)
+        job()
+    }
+}
+
+/**
+ * 执行，在DefaultDispatcher 线程中执行，可以用于最外层 Dispatchers.Defaultr 线程 无阻塞的
+ */
+inline fun LifecycleOwner.launchDefault(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+): Job {
+    return lifecycleScope.launch(
+        checkCoroutineExceptionHandler(
+            DefaultDispatcher + context,
+            exception = cache,
+            exception2 = cache2,
+        )
+    ) {
         delay(delayTime)
         job()
     }
@@ -178,14 +239,18 @@ inline fun <T> LifecycleOwner.async(
     delayTime: Long = 0,
     noinline job: suspend () -> T
 ): Deferred<T> {
-    val handleContext = checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)
+    val handleContext =
+        checkCoroutineExceptionHandler(context, exception = cache, exception2 = cache2)
     return lifecycleScope.async(handleContext) {
         delay(delayTime)
         //自己实现异常，防止根异常无法捕获
         runCatching {
             job()
         }.onFailure {
-            if (handleContext is CoroutineExceptionHandler) handleContext.handleException(coroutineContext, it)
+            if (handleContext is CoroutineExceptionHandler) handleContext.handleException(
+                coroutineContext,
+                it
+            )
         }.getOrNull() as T
     }
 }
@@ -201,6 +266,17 @@ inline fun View.launch(
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ) = toLifecycle().launch(context, cache, cache2, delayTime, job)
+
+/**
+ * 执行，在DefaultDispatcher 线程中执行，可以用于最外层 Dispatchers.Defaultr 线程 无阻塞的
+ */
+inline fun View.launchDefault(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = toLifecycle().launchDefault(context, cache, cache2, delayTime, job)
 
 /**
  * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
@@ -252,6 +328,21 @@ inline fun View.launchLifecycle(
     noinline job: suspend () -> Unit
 ) = lifecycle {
     val jobR = it.launch(context, cache, cache2, delayTime, job)
+    onStart?.invoke(jobR)
+}
+
+/**
+ * 执行，在DefaultDispatcher 线程中执行，可以用于最外层 Dispatchers.Defaultr 线程 无阻塞的
+ */
+inline fun View.launchDefaultLifecycle(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline onStart: ((Job) -> Unit)? = null,
+    noinline job: suspend () -> Unit
+) = lifecycle {
+    val jobR = it.launchDefault(context, cache, cache2, delayTime, job)
     onStart?.invoke(jobR)
 }
 
@@ -330,6 +421,18 @@ inline fun activityLaunchIO(
     delayTime: Long = 0,
     noinline job: suspend () -> Unit
 ) = fCActivity?.launchIO(context, cache, cache2, delayTime, job)
+
+/**
+ * 执行，在DefaultDispatcher 线程中执行，可以用于最外层 Dispatchers.Defaultr 线程 无阻塞的
+ */
+inline fun launchDefault(
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline cache: ((Throwable) -> Unit)? = null,
+    noinline cache2: ((CoroutineContext, Throwable) -> Unit)? = null,
+    delayTime: Long = 0,
+    noinline job: suspend () -> Unit
+) = fCActivity?.launchDefault(context, cache, cache2, delayTime, job)
+
 /**
  * 执行，在Android IO线程中执行，可以用于最外层 Dispatchers.IO 线程 无阻塞的
  */
