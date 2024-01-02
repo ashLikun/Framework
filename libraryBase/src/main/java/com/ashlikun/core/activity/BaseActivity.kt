@@ -112,7 +112,6 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
 
     }
     override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
         var newConfiguration = newConfig
         BaseUtils.configurationChanged?.forEach {
             newConfiguration = it(newConfiguration)
