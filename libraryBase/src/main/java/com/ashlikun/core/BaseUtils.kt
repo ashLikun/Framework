@@ -58,6 +58,16 @@ object BaseUtils {
         } else applyOverrideConfiguration!!
 
     /**
+     * Activity onConfigurationChanged
+     */
+    internal var configurationChanged: MutableList<((newConfig: Configuration) -> Configuration)>? = null
+    val onConfigurationChanged
+        get() = if (configurationChanged == null) {
+            configurationChanged = mutableListOf()
+            configurationChanged!!
+        } else configurationChanged!!
+
+    /**
      * 当调用Activity的getResources将被调用，便于hook,只调用一次，内部会缓存
      */
     internal var activityGetResources: MutableList<((result: Resources) -> Resources)>? = null

@@ -111,7 +111,14 @@ abstract class BaseActivity : AppCompatActivity(), IBaseWindow, OnDispatcherMess
         super.attachBaseContext(newContext)
 
     }
-
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        var newConfiguration = newConfig
+        BaseUtils.configurationChanged?.forEach {
+            newConfiguration = it(newConfiguration)
+        }
+        super.onConfigurationChanged(newConfiguration)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         BaseUtils.activityPreCreated?.forEach {
             it(this, savedInstanceState)
